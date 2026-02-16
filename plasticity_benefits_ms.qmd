@@ -51,7 +51,7 @@ There are two key patterns of note here. First, the tropical organism gains a gr
 ```{r plot phenomenon}
 #| fig-width: 7
 #| fig-height: 3.5
-#| fig-cap: "Figure 1. The benefits of thermal plasticiy depend on the breadth of the thermal performance curve (TPC). The left panel shows a TPC with a narrow breadth, and the right panel shows a TPC with a broad breadth. In both panels, the black dashed line shows the original TPC, the red line shows the TPC after a 30% plastic shift, and the vertical dashed lines show the original and new body temperatures. The red arrows show the fitness benefits of plasticity for each TPC."
+#| fig-cap: "Figure 1. The benefits of thermal plasticiy depend on the breadth of the thermal performance curve (TPC). The left panel shows a TPC with a narrow breadth, and the right panel shows a TPC with a broad breadth. In both panels, the black dashed line shows the original TPC, the red line shows the TPC after a 30% plastic shift, and the vertical dashed lines show the original and new body temperatures. The red arrows show the fitness benefits of plasticity for each TPC." # nolint
 
 # thermal performance curve (tpc)
 tpc <- function(temps, topt, ctmin, ctmax) {
@@ -192,10 +192,10 @@ In fact, to maintan the same level of fitness after a substantial increase in bo
 #| fig-width: 4.25
 #| fig-height: 3
 #| out-width: "75%"
-#| fig.cap: "Figure 2. To match the fitness of the wide TPC at an ARR of 30% after a 3°C increase in body temperature (Tb), the narrow TPC needs to exhibit an ARR of 65%."
+#| fig.cap: "Figure 2. To match the fitness of the wide TPC at an ARR of 30% after a 3°C increase in body temperature (Tb), the narrow TPC needs to exhibit an ARR of 65%." # nolint
 
 # define sequence of ARRs to test
-arrs <- seq(0,1, by = 0.01)
+arrs <- seq(0, 1, by = 0.01)
 orginal_temp <- 30
 delta_temp <- 3
 
@@ -227,21 +227,21 @@ arr_df <- data.frame(
     cols = c(w_broad, w_narrow),
     names_to = "curve_breadth",
     values_to = "fitness"
-  )|>
+  ) |>
   mutate(
     curve_breadth = recode(curve_breadth,
                            w_broad = "Wide TPC",
                            w_narrow = "Narrow TPC")
   )
 
-# find at which ARR the fitness of the narrow TPC is equal to the fitness of 
+# find at which ARR the fitness of the narrow TPC is equal to the fitness of
 # the broad TPC at ARR = 0.3
 w_broad_30 <- arr_df |>
-  filter(curve_breadth == "Wide TPC", arr == 0.3) |> 
+  filter(curve_breadth == "Wide TPC", arr == 0.3) |>
   pull(fitness)
 arr_narrow_equal <- arr_df |>
-  filter(curve_breadth == "Narrow TPC", fitness >= w_broad_30) |> 
-  slice(1) |> 
+  filter(curve_breadth == "Narrow TPC", fitness >= w_broad_30) |>
+  slice(1) |>
   pull(arr)
 
 # plot the phenomenon
@@ -261,19 +261,20 @@ arr_df |>
     geom = "point", x = 0.3, y = w_broad_30, size = 2, color = "#56B4E9"
   ) +
   annotate(
-    geom = "point", 
+    geom = "point",
     x = arr_narrow_equal, y = w_broad_30, size = 2, color = "#E69F00"
   ) +
   annotate(
-    geom = "segment", 
+    geom = "segment",
     x = arr_narrow_equal, xend = arr_narrow_equal, y = -Inf, yend = w_broad_30,
     linetype = "dashed", color = "#E69F00"
   ) +
   scale_color_manual(values = c("#E69F00", "#56B4E9")) +
   scale_x_continuous(
-    expand = c(0, 0), 
+    expand = c(0, 0),
     breaks = seq(0, 1, 0.1),
-    labels = scales::percent_format(accuracy = 1)) +
+    labels = scales::percent_format(accuracy = 1)
+  ) +
   theme_classic() +
   theme(
     legend.text = element_text(size = 12),
@@ -310,13 +311,8 @@ exp_w <- function(topt, ctmin, ctmax, mean_tb, sd_tb) {
 # calculate expected fitness of narrow TPC with and without thermal variability
 ggplot() +
   geom_line(aes(x = temps, y = tpc_narrow), color = "black", linewidth = 1.25) +
-  geom_line(aes(x = temps, y = tpc_narrow_plastic), color = "darkred", linewidth = 1.25) 
-
-
+  geom_line(aes(x = temps, y = tpc_narrow_plastic), color = "darkred", linewidth = 1.25) # nolint
 ```
-
-
-
 
 
 ## Additional methods
