@@ -149,6 +149,7 @@ div.csl-indent {
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
   <li><a href="#the-basics" id="toc-the-basics" class="nav-link" data-scroll-target="#the-basics">The basics</a></li>
   <li><a href="#incorporating-variability-in-body-temperature" id="toc-incorporating-variability-in-body-temperature" class="nav-link" data-scroll-target="#incorporating-variability-in-body-temperature">Incorporating variability in body temperature</a></li>
+  <li><a href="#risk-of-thermal-injury" id="toc-risk-of-thermal-injury" class="nav-link" data-scroll-target="#risk-of-thermal-injury">Risk of thermal injury</a></li>
   <li><a href="#additional-methods" id="toc-additional-methods" class="nav-link" data-scroll-target="#additional-methods">Additional methods</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
@@ -172,7 +173,7 @@ div.csl-indent {
 </section>
 <section id="the-basics" class="level2">
 <h2 class="anchored" data-anchor-id="the-basics">The basics</h2>
-<p>We begin by considering two ectothermic organisms with asymmetrical <strong>thermal performance curves</strong> (TPCs) with narrow and wide constitutive thermal breadths, representing a tropical and high latitude ectotherm, respectively (Figure 1). For simplicity, first assume that each organism experiences a constant body temperature that is equal to the temperature that maximizes its fitness (i.e., the optimal temperature, T<sub>opt</sub>, set to 30 <sup>o</sup>C, for this example). Next, assume that both organisms experience the same amount of change in body temperature (e.g., an increase of 3 <sup>o</sup>C due to warming environmental conditions). In the abscence of any plasticity, both organisms will experience a decrease in fitness because their body temperatures exceed their T<sub>opt</sub>. However, the tropical organism will experience a much greater decrease in fitness than the high-latitude organism because it has a narrower TPC (black dashed lines in Figure 1). Now, assume that both organisms are capable of undergoing an adaptive plastic shift in their TPCs such that their fitness at the new body temperature increases (red TPCs in Figure 1). We know that thermal plasticity does not yield perfect compensation for temperature change, and this <strong>acclimation response ratio</strong> (ARR) is between 10 and 50% of the experienced change in body temperature (Cite). In this example, we assume an ARR of 30% for both TPCs, such that all the constituent traits of the TPCs shift by 0.3 <sup>o</sup>C each 1 <sup>o</sup>C increase in body temperature.</p>
+<p>We begin by considering two ectothermic organisms with asymmetrical <strong>thermal performance curves</strong> (TPCs) with narrow and wide constitutive thermal breadths, representing a tropical and high latitude ectotherm, respectively (Figure 1). For simplicity, first assume that each organism experiences a constant body temperature that is equal to the temperature that maximizes its fitness (i.e., the optimal temperature, T<sub>opt</sub>, set to 30 <sup>o</sup>C, for this example). Next, assume that both organisms experience the same amount of change in body temperature (e.g., an increase of 4 <sup>o</sup>C due to warming environmental conditions). In the abscence of any plasticity, both organisms will experience a decrease in fitness because their body temperatures exceed their T<sub>opt</sub>. However, the tropical organism will experience a much greater decrease in fitness than the high-latitude organism because it has a narrower TPC (black dashed lines in Figure 1). Now, assume that both organisms are capable of undergoing an adaptive plastic shift in their TPCs such that their fitness at the new body temperature increases (red TPCs in Figure 1). We know that thermal plasticity does not yield perfect compensation for temperature change, and this <strong>acclimation response ratio</strong> (ARR) is between 10 and 50% of the experienced change in body temperature (Cite). In this example, we assume an ARR of 30% for both TPCs, such that all the constituent traits of the TPCs shift by 0.3 <sup>o</sup>C each 1 <sup>o</sup>C increase in body temperature.</p>
 <p>There are two key patterns of note here. First, the tropical organism gains a greater fitness benefit from plasticity than the high latitude organism (red dashed line and red arrow). Recall that in this hypothetical example, both organism experience the same increase in body temperature and exhibit the same level of plasticity. Therefore, all else being equal, organisms with narrower constitutive breadths benefit the most from phenotypic plasticity. Second, although the net benefit of a given amount of plasticity is greater for the tropical species, the absolute fitness value remains lower after the plastic shift. As such, all else equal, organisms with narrow TPCs need to exhibit greater plasticity than organisms with broad TPCs to maintain a similar level of fitness when conditions change.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -198,11 +199,73 @@ div.csl-indent {
 </section>
 <section id="incorporating-variability-in-body-temperature" class="level2">
 <h2 class="anchored" data-anchor-id="incorporating-variability-in-body-temperature">Incorporating variability in body temperature</h2>
+<p>The example above makes the critical assumption that organisms experience a single T<sub>b</sub>, when in reality, organisms experience a distribution of T<sub>b</sub>s. A key consequence of this variability is a shift in T<sub>opt</sub> towards a value greater than the mean body temperature experienced (i.e., T<sub>m</sub>). This shift occurs because, counterintuitively, the expected fitness of a TPC when T<sub>m</sub> = T<sub>opt</sub> is smaller than when T<sub>m</sub> &lt; T<sub>opt</sub> (Figure 3A). This is because, by experiencing a distribution of T<sub>b</sub> values, organisms experience some T<sub>b</sub> values that are greater than T<sub>opt</sub>, which have a disproportionate negative effect on expected fitness due to the asymmetry of the TPC. <strong>Jensen’s inequality</strong> describes this phenomenon mathematically (Ruel &amp; Ayres 1999). As a result, natural selection will favor organisms that develop a <strong>thermal safety margin</strong>, or a TPC with a T<sub>opt</sub> that is greater than T<sub>m</sub>.</p>
+<p>A key question, however, is what thermal safety margin maximizes fitness for a given TPC shape and a given temperature regime? Past studies concluded that the <strong>optimal thermal safety margin</strong> (OTSM) increases as a function of the asymetry of a TPC (Martin &amp; Huey 2008). However, less is known about how the OTSM changes with both increasing variability in T<sub>b</sub> and increasing breadth of the TPC. We find that the OTSM increases with variability but only up to an extent, after which it plateaus, regardless of TPC breadth, but that the value at which it plateaus is greater for wider than for narrower TPCs (Figure 3B). For all subsequent analyses, we will assume that a TPC experiences variable T<sub>b</sub> values and that, after allow sufficient time for natural selection to act, the TPC has evolved an OTSM that maximizes fitness given its characteristics and the variability in T<sub>b</sub> it experiences.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="index_files/figure-html/plot%20optimal%20thermal%20safety%20margin-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure 3. The expected fitness of a TPC when the mean body temperature (Tm) is equal to the optimal temperature (Topt) is smaller than when Tm is less than Topt (A). This is because the distribution of body temperatures includes values greater than Topt, which have a disproportionate negative effect on expected fitness due to the asymmetry of the TPC. The optimal thermal safety margin (the difference between Topt and Tm that maximizes fitness), will increase as a function of the variability in Tb up to a plateau that will be greater for wider TPCs (B)."><img src="index_files/figure-html/plot%20optimal%20thermal%20safety%20margin-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="2400" alt="Figure 3. The expected fitness of a TPC when the mean body temperature (Tm) is equal to the optimal temperature (Topt) is smaller than when Tm is less than Topt (A). This is because the distribution of body temperatures includes values greater than Topt, which have a disproportionate negative effect on expected fitness due to the asymmetry of the TPC. The optimal thermal safety margin (the difference between Topt and Tm that maximizes fitness), will increase as a function of the variability in Tb up to a plateau that will be greater for wider TPCs (B)."></a></p>
+</figure>
+</div>
+<figcaption><strong>Figure 3</strong>. The expected fitness of a TPC when the mean body temperature (T<sub>m</sub>) is equal to the optimal temperature (T<sub>opt</sub>) is smaller than when T<sub>m</sub> is less than T<sub>opt</sub> (A). This is because the distribution of body temperatures includes values greater than T<sub>opt</sub>, which have a disproportionate negative effect on expected fitness due to the asymmetry of the TPC. The optimal thermal safety margin (the difference between T<sub>opt</sub> and T<sub>m</sub> that maximizes fitness), will increase as a function of the variability in T<sub>b</sub> up to a plateau that will be greater for wider TPCs (B).</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>What happens when we incorporate thermal variability?</p>
+<ul>
+<li>Generally, the benefits of plasticity are reduced with the effect being more exaggerated in wide TPCs.</li>
+<li>We can conclude that plasticity is not only most beneficial for organisms with narrow TPCs but also those that experience less variability in T<sub>b</sub>.</li>
+</ul>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="index_files/figure-html/plot%20phenomenon%20with%20variability-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="index_files/figure-html/plot%20phenomenon%20with%20variability-1.png" class="img-fluid figure-img" width="2100"></a></p>
+<p><a href="index_files/figure-html/plot%20phenomenon%20with%20variability-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="index_files/figure-html/plot%20phenomenon%20with%20variability-1.png" class="img-fluid figure-img" width="2100"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>{Maybe remove}</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="index_files/figure-html/plot%20benefit%20of%20plasticity%20as%20a%20function%20of%20arr%202-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="index_files/figure-html/plot%20benefit%20of%20plasticity%20as%20a%20function%20of%20arr%202-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1875"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>If we look at what TPC experiences the most benefit across different ARR and different T<sub>b</sub> variability, we find that the benefits of plasticity are greatest for organisms experiencing small increases in temperature and experiencing very stable body temperature distributions. For very variable body temperature distributions, plasticity becomes less and less beneficial for any level of ARR. With it being only mildly beneficial for organisms experiencing very large changes in mean body temperature.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="index_files/figure-html/plot%20expected%20fitness-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="index_files/figure-html/plot%20expected%20fitness-1.png" class="img-fluid figure-img" width="2400"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="risk-of-thermal-injury" class="level2">
+<h2 class="anchored" data-anchor-id="risk-of-thermal-injury">Risk of thermal injury</h2>
+<ul>
+<li>The benefit of plasticity is not limited to changes in expected fitness but also changes in the risk of thermal injury (i.e., experiencing a body temperature above or below CTmax, specially above CTmax).</li>
+<li>Sometimes, sudden heat events might kill you even if the average fitness is high?</li>
+<li>Is the pattern the same with narrow and broad TPCs?</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="index_files/figure-html/unnamed-chunk-1-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="1800"></a></p>
 </figure>
 </div>
 </div>
@@ -216,8 +279,8 @@ div.csl-indent {
 <section id="expected-fitness-calculation" class="level4">
 <h4 class="anchored" data-anchor-id="expected-fitness-calculation">Expected fitness calculation</h4>
 </section>
-<section id="risk-of-thermal-injury" class="level4">
-<h4 class="anchored" data-anchor-id="risk-of-thermal-injury">Risk of thermal injury</h4>
+<section id="risk-of-thermal-injury-1" class="level4">
+<h4 class="anchored" data-anchor-id="risk-of-thermal-injury-1">Risk of thermal injury</h4>
 </section>
 <section id="generating-unique-tpcs-and-initial-body-temperature-distributions" class="level4">
 <h4 class="anchored" data-anchor-id="generating-unique-tpcs-and-initial-body-temperature-distributions">Generating unique TPCs and initial body temperature distributions</h4>
