@@ -333,7 +333,7 @@ arr_df |>
   )
 ```
 
-## Incorporating variability in body temperature
+## Incorporating Variability in Body Temperature
 
 Let us now revisit the original example, but with one fundamental difference: both tropical and high-latitude organisms can now experience a single body temperature or a distribution of body temperatures (Figure 4). If they experience a distribution of body temperatures, we assume that their TPCs have evolved a thermal safety margin that maximizes fitness given the body temperature variability they experience. As before, the tropical organism with a narrow TPC experiences a relatively greater fitness benefit from plasticity than the high latitude organism with a wide TPC. However, when variability is incorporated, two patterns emerge. First, predictably, the expected fitness of the TPC (see additional methods) is reduced when experienced body temperatures become variable, a consequence of further deviations from its T<sub>opt</sub>. Second, the benefit of plasticity is reduced for both organisms when experiencing a variable body temperature regime, yet this reduction is most notable in the narrow compared to the broad TPC. This is because, by evolving a thermal safety margin, the organism is already partially buffered against changes in mean temperature, and thus the additional benefits of plasticity are reduced. From this, we can conclude that plasticity is not only most beneficial for organisms with narrow thermal tolerances but also for those that experience more stable body temperatures. 
 
@@ -397,14 +397,14 @@ tb_var <- c(0, 2, 5, 10)
 tpc_widths <- c(15, 30, 45)
 plasticity <- c("No Plasticity", "With Plasticity")
 
-# initialize expected fitnss data frame
+# initialize expected fitness data frame
 exp_w_df <- expand.grid(
   tpc_width = tpc_widths,
   plasticity = plasticity,
   tb_var = tb_var
 ) |>
   arrange(tpc_width, plasticity, tb_var) |>
-  mutate(expected_fitness = NA)
+  mutate(expected_fitness = NA, original_expected_fitness = NA)
 exp_w_df$ctmin <- case_when(
   exp_w_df$tpc_width == 15 ~ ctmins[1],
   exp_w_df$tpc_width == 30 ~ ctmins[2],
@@ -417,7 +417,7 @@ exp_w_df$ctmax <- case_when(
 )
 
 # calculate mean body temperature that maximizes expected fitness
-for(i in seq_len(nrow(exp_w_df))) {
+for (i in seq_len(nrow(exp_w_df))) {
   exp_w_df$mean_tb[i] <- topt - otsm(
     ctmin = exp_w_df$ctmin[i],
     topt = topt,
@@ -428,8 +428,16 @@ for(i in seq_len(nrow(exp_w_df))) {
 
 # populate data frame with expected fitness values
 for (i in seq_len(nrow(exp_w_df))) {
-  # check if plasticity is "With Plasticity" and adjust topt, ctmin, and ctmax accordingly
-  plasticity_on <- ifelse(exp_w_df$plasticity[i] == "With Plasticity", TRUE, FALSE)
+  plasticity_on <- ifelse(
+    exp_w_df$plasticity[i] == "With Plasticity", TRUE, FALSE
+  )
+  exp_w_df$original_expected_fitness[i] <- exp_w(
+    topt = topt,
+    ctmin = exp_w_df$ctmin[i],
+    ctmax = exp_w_df$ctmax[i],
+    mean_tb = exp_w_df$mean_tb[i],
+    sd_tb = exp_w_df$tb_var[i]
+  )
   exp_w_df$expected_fitness[i] <- exp_w(
     topt = topt + ifelse(plasticity_on, arr * delta_temp, 0),
     ctmin = exp_w_df$ctmin[i] + ifelse(plasticity_on, arr * delta_temp, 0),
@@ -462,7 +470,7 @@ tpc_var_df <- expand.grid(
 for (i in seq_len(nrow(tpc_var_df))) {
   tpc_var_df$performance[i] <- tpc(
     temps = tpc_var_df$temps[i],
-    topt = topt + ifelse(tpc_var_df$plasticity[i] == "With Plasticity", arr * delta_temp, 0),
+    topt = topt + ifelse(tpc_var_df$plasticity[i] == "With Plasticity", arr * delta_temp, 0), # nolint
     ctmin = tpc_var_df$ctmin[i] + ifelse(tpc_var_df$plasticity[i] == "With Plasticity", arr * delta_temp, 0), # nolint
     ctmax = tpc_var_df$ctmax[i] + ifelse(tpc_var_df$plasticity[i] == "With Plasticity", arr * delta_temp, 0) # nolint
   )
@@ -534,6 +542,12 @@ phenomenon_plot <- ggplot() +
   ) +
   geom_area(
     data = tb_dist_df |> filter(tb_var %in% c(2, 5)),
+    aes(x = temps - delta_temp, y = probability),
+    alpha = 0.5,
+    fill = "gray"
+  ) +
+  geom_area(
+    data = tb_dist_df |> filter(tb_var %in% c(2, 5)),
     aes(x = temps, y = probability),
     alpha = 0.5,
     fill = "darkorange"
@@ -542,6 +556,22 @@ phenomenon_plot <- ggplot() +
     data = tpc_var_df,
     aes(x = temps, y = performance, color = plasticity),
     linewidth = 1.25, alpha = 0.75
+  ) +
+  geom_segment(
+    data = exp_w_df |> filter(tb_var %in% c(2, 5)),
+    aes(
+      x = -Inf, xend = 30,
+      y = original_expected_fitness, yend = original_expected_fitness
+    ),
+    color = "gray", alpha = 0.5
+  ) +
+  geom_segment(
+    data = exp_w_df |> filter(tb_var %in% c(2, 5)),
+    aes(
+      x = -Inf, xend = 30,
+      y = original_expected_fitness, yend = original_expected_fitness
+    ),
+    linetype = "dashed"
   ) +
   geom_segment(
     data = exp_w_df |> filter(tb_var %in% c(2, 5)),
@@ -612,7 +642,8 @@ phenomenon_plot <- ggplot() +
     axis.ticks = element_line(),
     panel.grid = element_blank(),
     plot.title = element_text(size = 20, face = "bold", vjust = -8),
-  )
+  ) +
+  coord_cartesian(xlim = c(0, 50))
 
 # plot change in fitness as a result of plasticity
 change_plot <- fitness_change_df |>
@@ -625,7 +656,7 @@ change_plot <- fitness_change_df |>
     name = expression(sigma[T[b]])
   ) +
   labs(
-    y = "Change in expected fitness due to plasticity",
+    y = "Benefit of plasticity (change in expected fitness)",
     x = "TPC breadth (°C)",
     title = "B"
   ) +
@@ -644,9 +675,10 @@ change_plot <- fitness_change_df |>
 
 # combine plots
 ggarrange(
-  phenomenon_plot, change_plot, 
-  nrow = 1, ncol = 2, 
-  widths = c(2,0.75))
+  phenomenon_plot, change_plot,
+  nrow = 1, ncol = 2,
+  widths = c(2, 0.75)
+)
 ```
 
 If we consider the TPC breadth that benefits most from plasticity across different ARR assumptions and levels of body temperature variability, we find that the benefits of plasticity are greatest for organisms with narrow TPC, substantial acclimation capacity (greater ARR), experiencing stable body temperature distributions, and only when experiencing moderate degrees of cooling and warming. For wider TPCs experiencing variable body temperature distributions, plasticity becomes increasingly less beneficial at any ARR. In fact, in some cases, plastically changing TPCs can reduce fitness when changes in mean body temperature are small but body temperature variability is high (Figure 4). 
