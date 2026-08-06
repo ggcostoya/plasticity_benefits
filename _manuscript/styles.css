@@ -11,7 +11,7 @@ body, .manuscript {
   font-weight: bold;
 }
 
-.quarto-title-meta-affiliation p.affiliation {
+.quarto-title-meta-abstract p.affiliation {
   font-size: 1rem;
   font-style: italic;
 }

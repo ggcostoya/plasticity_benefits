@@ -23,7 +23,6 @@ author:
     orcid: "0000-0003-0522-6108"
 abstract: |
   Adaptive phenotypic plasticity is expected to evolve when environmental conditions change predictably over time. This has led to the hypothesis that ectotherms in environments with low temperature seasonality, such as the tropics, should evolve lower thermophysiological plasticity than those from more seasonal environments (the Climate Variability Plasticity Hypothesis, or CVHP). Yet, empirical support for the CVHP is incredibly low, creating a need to identify other factors that can help explain how thermal plasticity evolves. Here, we use numerical models to show that the evolution of constitutive thermal tolerance breadth greatly affects the evolutionary benefits of thermal plasticity. In particular, tolerance breadth interacts with within- and between-season temperature variation in ways that can confound expectations of the CVHP, including conditions in which organisms from less seasonal environments benefit most from expressing plasticity. Our findings indicate that a more holistic view of the relationship between thermophysiology and environmental temperature is needed to explain the evolution of thermal plasticity across climatic gradients. 
-bibliography: plasticity_benefits.bib
 format:
     html:
         toc: true
