@@ -1,21 +1,23 @@
 project:
   type: manuscript
+  render:
+    - "!index_beta.qmd"
 
 manuscript:
   article: index.qmd
 
 format:
   html:
-    comments:
-      hypothesis: true
-  docx: default
-  jats: default
+    theme: cosmo
+    css: styles.css
 
-  # (other formats)
-  # pdf: default
+knitr:
+  opts_chunk:
+    dev: png
+    dpi: 300
 
 execute:
-  freeze: true
+  freeze: false
 
 
 

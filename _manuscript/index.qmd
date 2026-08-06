@@ -1,21 +1,28 @@
 ---
-title: "On the limited benefits of thermal plasticity across latitudes"
+title: "Climatic variability and the paradox of plasticity"
 author:
   - name: "Alex Gunderson"
-    affiliation: "Tulane University"
+    affiliations:
+      - id: tulane
+        name: "Department of Ecology and Evolutionary Biology, Tulane University, New Orleans, LA 70118, USA"
     email: "agunderson@tulane.edu"
     orcid: "0000-0002-0120-4246"
     corresponding: true
-  - name: "Guillermo Garcia-Costoya"
-    affiliation: "University of Nevada, Reno"
-    email: "ggarciacosto@gmail.com"
-    orcid: "0000-0003-0522-6108"
   - name: "Michael L. Logan"
-    affiliation: "University of Nevada, Reno"
+    affiliations:
+      - id: unr
+        name: "Department of Biology and Graduate Program in Ecology, Evolution, and Conservation Biology, University of Nevada, Reno, Reno, NV, 89557, USA"
     email: "mike.logan1983@gmail.com"
     orcid: "0000-0003-2242-1810"
+  - name: "Guillermo Garcia-Costoya"
+    affiliations:
+      - ref: unr
+      - id: gatech
+        name: "School of Biological Sciences, Georgia Institute of Technology, Atlanta, GA 30332, USA"
+    email: "ggarciacosto@gmail.com"
+    orcid: "0000-0003-0522-6108"
 abstract: |
-  {Placeholder}
+  Adaptive phenotypic plasticity is expected to evolve when environmental conditions change predictably over time. This has led to the hypothesis that ectotherms in environments with low temperature seasonality, such as the tropics, should evolve lower thermophysiological plasticity than those from more seasonal environments (the Climate Variability Plasticity Hypothesis, or CVHP). Yet, empirical support for the CVHP is incredibly low, creating a need to identify other factors that can help explain how thermal plasticity evolves. Here, we use numerical models to show that the evolution of constitutive thermal tolerance breadth greatly affects the evolutionary benefits of thermal plasticity. In particular, tolerance breadth interacts with within- and between-season temperature variation in ways that can confound expectations of the CVHP, including conditions in which organisms from less seasonal environments benefit most from expressing plasticity. Our findings indicate that a more holistic view of the relationship between thermophysiology and environmental temperature is needed to explain the evolution of thermal plasticity across climatic gradients. 
 bibliography: plasticity_benefits.bib
 format:
     html:
@@ -24,42 +31,46 @@ format:
         code-fold: true
         fig-align: "center"
         fig-dpi: 300
-        theme: simplex
 ---
 
-```{r setup}
-#| message: false
-#| warning: false
+```{r r-setup, warning=FALSE, message=FALSE}
 
 # load packages
 library(tidyverse)
 library(ggpubr)
 library(viridis)
 library(ggnewscale)
+library(showtext)
+library(ggtext)
 ```
 
 ## Introduction
 
-Phenotypic plasticity is a ubiquitous feature of organisms that plays a key role in adaptation and responses to global change. As such, there is a great deal of interest in understanding how phenotypic plasticity evolves. In general, adaptive phenotypic plasticity is expected to evolve when environmental conditions fluctuate in a predictable manner. In many cases this expectation is met, but in many others it is not. Why not is an open question.
+Phenotypic plasticity, the capacity for organisms to express different phenotypes in different environments, is a ubiquitous feature of life. Phenotypic plasticity plays a central role in individual and population responses to global change because it enables individuals to resist the drop in fitness that would otherwise occur as their local environment shifts. Understanding when and how phenotypic plasticity evolves is therefore of both basic and practical importance. In general, adaptive phenotypic plasticity is expected to evolve when environmental conditions fluctuate predictably over time (Levins 1963, Lande 2009, Reed et al. 2010). This has led to the hypothesis that plasticity in thermophysiological traits, such as tolerance and sensitivity to heat and cold, is greatest in regions with high levels of temporal temperature variation (hereafter referred to as the Climate Variability Plasticity Hypothesis, or CVPH). The CVPH predicts that, for example, ectotherms in the tropics, where there is little seasonal temperature change, should evolve lower thermophysiological plasticity than those at high latitudes, where temperature seasonality is greater (Janzen 1967; Ghalambor et al. 2006; Angilletta 2009).
 
-Often overlooked when predicting the evolution of phenotypic plasticity is the fact that plasticity is not the only means of dealing with fluctuating environmental conditions. Rather than inducing a plastic response, organisms can evolve a constitutive phenotype that does well over a broad range of conditions. Under what conditions organisms should evolve inducible versus constitutive strategies (or some combination of the two) to adapt to environmental variation is an area of considerable work that is beyond our scope. However, recognizing that both plasticity and constitutive breadth are alternate solutions to the same problem is important. What this tells us is that our expectations for the evolution of plasticity should depend not just on the scale and predictability of environmental variation, but on the constitutive phenotypic breadth of the organisms under consideration.
+Because the CVPH is intuitive, it remains a central hypothesis in ecological and evolutionary physiology. Yet, paradoxically, analyses across phylogenetic and geographic scales have repeatedly failed to uncover a consistent positive relationship between plasticity in thermal physiology and latitude (Brattstrom 1968; Brattstrom 1970; Angilletta 2009; Gunderson and Stillman 2015; Campos et al. 2021; Weaving et al. 2022). Others have found mixed support, with expected patterns found in some subsets of data (e.g., some taxa or thermal traits) but not others (Rohr et al. 2018; Morley et al. 2019), including patterns opposite to the CVPH, with taxa at higher latitudes actually exhibiting less plastic capacity (Seebacher et al. 2015; Rohr et al. 2018). Latitude alone does not perfectly capture geographic differences in temporal temperature variation, so analyses have also been conducted that directly test for links between thermal plasticity and environmental temperature variation (e.g., temperature seasonality). These analyses have similarly found no support for the CVPH (Comte and Olden 2017), mixed support (Gunderson and Stillman 2015; Rohr et al. 2018), and inverse patterns (Rohr et al. 2018; Ruthsatz et al. 2024). The cause of this profound lack of correspondence between theoretical prediction and empirical reality is a mystery and indicates that we must look into forces beyond temporal climate variability to fully understand the evolution of plasticity in thermal physiology.
 
-Here, we explore how environmental variation and constitutive breadth interact to determine the evolutionary benefits of phenotypic plasticity. This work is motivated by our interest in thermal adaptation and the evolution of thermal tolerance plasticity in ectothermic animals. Plasticity in thermal physiology, such tolerance and sensitivity to heat and cold, is hypothesized to be greatest in areas with high levels of temporal variation in temperature (the Climate Variability Hypothesis, CVH). This leads to the prediction that ectotherms in the tropics should evolve less plasticity in thermal physiology than those at high latitude. Surprisingly, the CVH has little support. Analyses at many phylogenetic and geographic scales have found no relationship between plasticity in thermal physiology and latitude, and sometimes even find greater plasticity at low latitudes (Angilletta 2009, others). Similarly, analyses that directly test for links between thermal plasticity and environmental temperature variation have found no pattern, mixed support for the CVH, or a pattern inverse to the CVH.
+An important, though often overlooked, consideration when examining the evolution of thermal plasticity is that plasticity is not the only means of dealing with fluctuating environmental conditions. Rather than evolving an induced plastic response, organisms can evolve a constitutively expressed phenotype that enables high performance over a broad range of conditions (Lynch and Gabriel 1987; Scheiner 1993). Because both plasticity and constitutive tolerance breadth can serve as solutions to the same problem, our expectations for the evolution of plasticity should depend not just on the scale and predictability of environmental variation, but on the constitutive tolerance breadth of the organisms under consideration.
 
-The CVH is an intuitive hypothesis, and at first glance the lack of support for it is surprising. However, the predictions of the CVH are based on knowledge of environmental temperature dynamics alone. What these predictions do not weigh is a prominent pattern in ectotherm thermal physiology that does span latitude and other thermal gradients: animals that live in more variable thermal environments evolve greater constitutive thermal tolerance breadths (Sunday, others). For example, ectotherms at higher latitudes tolerate a wider range of temperatures than those in the low latitude tropics, and have broader thermal performance curves (see below) that make them less sensitive to temperature change. This is crucial, and may help explain why high latitude taxa do not consistently evolve greater thermal plasticity. In the next section, we begin with a simple demonstration of how before moving on to more complex scenarios.
+In ectotherms, constitutive thermal tolerance breadth frequently evolves predictably across latitudinal and other thermal gradients, with animals that live in more variable environments evolving wider breadths (Deutsch et al. 2008; Huey et al. 2009; Sunday et al. 2011; Muñoz et al. 2014; Sheldon and Tewksbury 2014; Buckley and Huey 2016; Gutiérrez‐Pesquera et al. 2016; Payne and Smith 2017; Shah et al. 2017; von May et al. 2017; Dewenter et al. 2024; Dewenter et al. 2025; Yilmaz et al. 2026). We propose that this systematic variation in constitutively expressed tolerance breadth could be one key to explaining the lack of empirical support for the CVPH. In what follows, we use numerical models to demonstrate how the evolutionary benefits of plasticity in thermal physiology depend crucially on constitutive thermal tolerance breadth in ways that can confound expectations of the CVPH.
 
-## The basics
+## Constitutively expressed thermal tolerance breadth and the benefits of plasticity
 
-We begin by considering two ectothermic organisms with asymmetrical **thermal performance curves** (TPCs) with narrow and wide constitutive thermal breadths, representing a tropical and high latitude ectotherm, respectively (Figure 1). For simplicity, first assume that each organism experiences a constant body temperature that is equal to the temperature that maximizes its fitness (i.e., the optimal temperature, T<sub>opt</sub>, set to 30 <sup>o</sup>C, for this example). Next, assume that both organisms experience the same amount of change in body temperature (e.g., an increase of 4 <sup>o</sup>C due to warming environmental conditions). In the abscence of any plasticity, both organisms will experience a decrease in fitness because their body temperatures exceed their T<sub>opt</sub>. However, the tropical organism will experience a much greater decrease in fitness than the high-latitude organism because it has a narrower TPC (black dashed lines in Figure 1). Now, assume that both organisms are capable of undergoing an adaptive plastic shift in their TPCs such that their fitness at the new body temperature increases (red TPCs in Figure 1). We know that thermal plasticity does not yield perfect compensation for temperature change, and this **acclimation response ratio** (ARR) is between 10 and 50% of the experienced change in body temperature (Cite). In this example, we assume an ARR of 30% for both TPCs, such that all the constituent traits of the TPCs shift by 0.3 <sup>o</sup>C each 1 <sup>o</sup>C increase in body temperature.
+Consider three ectothermic organisms with stereotypically asymmetrical thermal performance curves (TPCs; Sinclair et al. 2016) that differ in breadth (T<sub>br</sub>) within a realistic range (e.g., Deutsch et al. 2008, Sunday et al. 2011, Sheldon and Tewksbury 2014, von May 2017, see other citations above). We refer to these as narrow (T<sub>br</sub> = 15 °C), intermediate (T<sub>br</sub> = 30 °C), and wide (T<sub>br</sub> = 45 °C) TPCs (Figure 1). Assume that each organism’s starting body temperature (T<sub>b</sub>) is constant and at the temperature that maximizes fitness (thermal optimum, T<sub>opt</sub>). Now let’s assume the body temperature of each organism increases by an identical 3 °C, representing seasonal warming (Figure 1, gray vs. orange vertical line and arrow). In the absence of phenotypic plasticity, fitness declines for all organisms (Figure 1, gray vs. black horizontal lines). The magnitude of this fitness decrement is dependent on T<sub>br</sub>, with the narrowest TPC experiencing the greatest fitness decline and the widest TPC experiencing the least fitness decline (see also Deutsch et al. 2008, Huey et al. 2009).
 
-There are two key patterns of note here. First, the tropical organism gains a greater fitness benefit from plasticity than the high latitude organism (red dashed line and red arrow). Recall that in this hypothetical example, both organism experience the same increase in body temperature and exhibit the same level of plasticity. Therefore, all else being equal, organisms with narrower constitutive breadths benefit the most from phenotypic plasticity. Second, although the net benefit of a given amount of plasticity is greater for the tropical species, the absolute fitness value remains lower after the plastic shift. As such, all else equal, organisms with narrow TPCs need to exhibit greater plasticity than organisms with broad TPCs to maintain a similar level of fitness when conditions change.
+Next, we examined what happens when these organisms undergo a plastic shift in response to the higher body temperature (Figure 1, red curves). Empirically, thermal plasticity does not yield perfect compensation (Seebacher et al. 2015; Gunderson and Stillman 2015). Acclimation Response Ratios (ARRs), which describe how features of TPCs shift for each °C change in T<sub>b</sub>, generally range between 0.1 and 0.5 (Gunderson and Stillman 2015),  meaning that TPC features shifts 0.1 - 0.5 °C higher for every 1 °C increase in T<sub>b</sub>. We assume that each organism exhibits an identical ARR of 0.3 for this and all subsequent analyses.
 
-```{r plot-phenomenon}
-#| fig-width: 8
-#| fig-height: 3.5
-#| fig-cap: "**Figure 1**. The benefits of thermal plasticiy depend on the breadth of the thermal performance curve (TPC). The left panel shows a TPC with a narrow breadth, and the right panel shows a TPC with a broad breadth. In both panels, the black dashed line shows the original TPC, the red line shows the TPC after a 30% plastic shift, and the vertical dashed lines show the original and new body temperatures. The red arrows show the fitness benefits of plasticity for each TPC." # nolint
+After plastic adjustment, fitness under the warmer regime is improved for all taxa relative to the state without plasticity (Figure 1, red vs. black horizontal lines), but still declines commensurate with TPC breadth because plasticity is not fully compensatory (Figure 1, red vs. gray horizontal lines). Two other key patterns emerge. First, the net fitness benefit of plasticity (i.e., the difference in fitness with and without plasticity; red versus black horizontal lines in Figure 1) is highest for the organism with the narrowest TPC and lowest for the organism with a wider TPC. In other words, narrow TPCs do not just make fitness more sensitive to changes in body temperature; they can also make fitness more sensitive to plastic shifts in the TPC itself. 
 
-# thermal performance curve (tpc)
+Second, despite achieving the highest net benefit of plasticity, the narrow TPC organism's absolute fitness post-plastic shift remains lower than that of its intermediate and wide TPC counterparts (Figure 1). Therefore, in the absence of complete plastic compensation, organisms with narrow TPCs must have greater plastic capacity than organisms with broad TPCs to maintain equivalent absolute fitness under the same level of environmental change. In our example, the narrow and intermediate TPC organisms would need to express ARRs of 0.76 and 0.54 to match the fitness of the wide TPC organism expressing an ARR of 0.30 (Figure 2). Note also that the benefit of evolving greater plasticity (i.e., increasing ARR) is highest for the narrow TPC organism and lowest for the wide TPC organism (Figure 2). This can be seen as a difference in the slope of the relationship between plasticity benefit and ARR in Figure 2. Therefore, under similar environmental conditions, the benefit of evolving greater plasticity increases when constitutively expressed TPCs are narrower. 
+
+```{r plot-figure-1}
+#| fig-width: 9
+#| fig-height: 7
+#| fig-cap: |
+#|  **Figure 1**: Phenotypic plasticity can provide greater net fitness benefits for narrow than for broad thermal performance curves (TPCs). Shown are three organisms with TPCs that vary in their constitutive thermal breadth (T<sub>br</sub>): narrow (T<sub>br</sub> = 15 °C), left panel, intermediate (T<sub>br</sub> = 30 °C, middle panel), and wide (T<sub>br</sub> = 45 °C, right panel). The organisms have evolved to maximize fitness (W = 1) at the constant body temperature they experience, which in this case we set arbitrarily to 30 °C (T<sub>opt</sub>, gray vertical line). Following a 3 °C increase in body temperature (orange vertical line and arrow), absolute fitness declines across all organisms in the absence of plasticity (projected onto the y-axis via the gray vs. black horizontal lines), with the narrowest TPC experiencing the most severe decline in fitness. If all three organisms shift their TPC in response to warming through phenotypic plasticity by the same amount (here assuming an Acclimation Response Ratio (ARR) of 0.30), the net fitness benefit conferred by plasticity (the vertical distance between the red and black horizontal lines) is highest for the organism with the narrowest TPC and lowest in the organism with the widest TPC.
+
+# define TPC function
 tpc <- function(temps, topt, ctmin, ctmax) {
 
   # initialize performance vector and define psig
@@ -82,534 +93,481 @@ tpc <- function(temps, topt, ctmin, ctmax) {
 
 # define general parameters for tpcs
 temps <- seq(0, 50, by = 0.1) # temperature range
-delta_temp <- 4 # change in temperature
+delta_temp <- 3 # change in temperature
 arr <- 0.3 # acclimation response ratio (ARR) for plasticity
 
-# create TPCs with 3 different breadths
-tpc_15 <- tpc(temps = temps, topt = 30, ctmin = 20, ctmax = 35)
-tpc_30 <- tpc(temps = temps, topt = 30, ctmin = 5, ctmax = 40)
-tpc_45 <- tpc(temps = temps, topt = 30, ctmin = -5, ctmax = 45)
+# define TPC parameters: breadth, ctmin, ctmax
+params <- tibble(
+  breadth = seq(12, 48, by = 1)
+) |>
+  mutate(
+    ctmin = 30 - (breadth * (2 / 3)),
+    ctmax = 30 + (breadth * (1 / 3))
+  )
 
-# same 3 TPCs but with a plastic shift
-tpc_15_plastic <- tpc(
-  temps = temps, topt = 30 + arr * delta_temp,
-  ctmin = 20 + arr * delta_temp, ctmax = 35 + arr * delta_temp
-)
-tpc_30_plastic <- tpc(
-  temps = temps, topt = 30 + arr * delta_temp,
-  ctmin = 5 + arr * delta_temp, ctmax = 40 + arr * delta_temp
-)
-tpc_45_plastic <- tpc(
-  temps = temps, topt = 30 + arr * delta_temp,
-  ctmin = -5 + arr * delta_temp, ctmax = 45 + arr * delta_temp
-)
+# generate TPCs with and without plasticity
+tpc_df <- expand_grid(
+  params, plasticity = c("TPC without plasticity", "TPC with plasticity")
+) |>
+  rowwise() |>
+  mutate(
+    topt_shift = ifelse(
+      plasticity == "TPC with plasticity", arr * delta_temp, 0
+    ),
+    performance = list(tpc(
+      temps = temps,
+      topt = 30 + topt_shift,
+      ctmin = ctmin + topt_shift,
+      ctmax = ctmax + topt_shift
+    ))
+  ) |>
+  unnest(performance) |>
+  mutate(temp = rep(temps, n() / length(temps))) |>
+  select(temp, performance, breadth, plasticity) |>
+  rename(tpc_breadth = breadth)
 
-tpc_df <- tibble(
-  temp = rep(temps, 6),
-  performance = c(
-    tpc_15, tpc_30, tpc_45, tpc_15_plastic, tpc_30_plastic, tpc_45_plastic
-  ),
-  tpc_breadth = rep(c(15, 30, 45, 15, 30, 45), each = length(temps)),
-  plasticity = rep(c("No Plasticity", "With Plasticity"), each = length(temps) * 3)
-)
+# prepare segments data frame for plotting
+segments_df <- tpc_df |>
+  filter(temp == (30 + delta_temp)) |>
+  mutate(
+    x = 0,
+    xend = 30 + delta_temp,
+    y = performance,
+    yend = performance
+  ) |>
+  select(x, xend, y, yend, tpc_breadth, plasticity)
 
-# prepare segments data frame
-segments_df <- data.frame(
-  x = c(0, 0, 0, 0, 0, 0),
-  xend = rep(30 + delta_temp, 6),
-  y = c(
-    tpc_15[temps == (30 + delta_temp)],
-    tpc_15_plastic[temps == (30 + delta_temp)],
-    tpc_30[temps == (30 + delta_temp)],
-    tpc_30_plastic[temps == (30 + delta_temp)],
-    tpc_45[temps == (30 + delta_temp)],
-    tpc_45_plastic[temps == (30 + delta_temp)]
-  ),
-  yend = c(
-    tpc_15[temps == (30 + delta_temp)],
-    tpc_15_plastic[temps == (30 + delta_temp)],
-    tpc_30[temps == (30 + delta_temp)],
-    tpc_30_plastic[temps == (30 + delta_temp)],
-    tpc_45[temps == (30 + delta_temp)],
-    tpc_45_plastic[temps == (30 + delta_temp)]
-  ),
-  tpc_breadth = rep(c(15, 30, 45), each = 2),
-  plasticity = rep(c("No Plasticity", "With Plasticity"), 3)
-)
+# benefit of plasticity arrows df
+benefits_df <- segments_df |>
+  group_by(tpc_breadth) |>
+  mutate(benefit = diff(y)) |>
+  ungroup()
 
-# prepare arrows data frame
-arrows_df <- data.frame(
-  x = c(10, 10, 10),
-  xend = c(10, 10, 10),
-  y = c(
-    tpc_15[temps == (30 + delta_temp)] + 0.01,
-    tpc_30[temps == (30 + delta_temp)] + 0.01,
-    tpc_45[temps == (30 + delta_temp)] + 0.01
-  ),
-  yend = c(
-    tpc_15_plastic[temps == (30 + delta_temp)] - 0.01,
-    tpc_30_plastic[temps == (30 + delta_temp)] - 0.01,
-    tpc_45_plastic[temps == (30 + delta_temp)] - 0.01
-  ),
-  tpc_breadth = c(15, 30, 45)
-)
-
-# plot the phenomenon
-tpc_df |>
-  ggplot(aes(x = temp, y = performance, color = plasticity)) +
+# plot panel A
+panel_a <- ggplot(
+  tpc_df |> filter(tpc_breadth %in% c(15, 30, 45)),
+  aes(x = temp, y = performance, color = plasticity)
+) +
   annotate(
-    geom = "segment", x = 30, xend = 30 + delta_temp, y = 0.05, yend = 0.05,
-    arrow = arrow(length = unit(0.2, "cm")), linewidth = 1.25, color = "darkorange" # nolint
-  ) +
-  annotate(geom = "point", x = 30, y = 0.05, size = 2, color = "darkorange") +
-  annotate(geom = "segment", x = 0, xend = 30, y = 1, yend = 1, color = "gray", linewidth = 1) +
-  annotate(
-    geom = "segment", x = 0, xend = 30, y = 1, yend = 1, 
-    color = "black", linetype = "dashed", linewidth = 1
+    geom = "segment",
+    x = 0, xend = 30, y = 1, yend = 1,
+    color = "darkgray", alpha = 0.6, linewidth = 1
   ) +
   geom_vline(
     data = tibble(
-      xintercept = c(30, 30 + delta_temp),
-      plasticity = c("Original Tb", "Tb after warming")
+      x = c(30, 30 + delta_temp),
+      plasticity = rep(c("Original Tb", "Tb after warming"))
     ),
-    aes(xintercept = xintercept, color = plasticity),
-    alpha = 0.5, linewidth = 1.5, key_glyph = "path"
+    aes(xintercept = x, color = plasticity),
+    alpha = 0.6, key_glyph = "path", linewidth = 1
+  ) +
+  geom_segment(
+    data = segments_df |> filter(tpc_breadth %in% c(15, 30, 45)),
+    aes(x = x, xend = xend, y = y, yend = yend, color = plasticity),
+    alpha = 0.6, linewidth = 1
+  ) +
+  geom_segment(
+    data = benefits_df |>
+      filter(tpc_breadth %in% c(15, 30, 45)) |>
+      filter(plasticity == "TPC without plasticity"),
+    aes(
+      x = 10, xend = 10,
+      y = y + 0.001, yend = y + benefit - 0.001
+    ),
+    arrow = arrow(length = unit(0.3, "cm")),
+    color = "red",
+    linewidth = 1.25
   ) +
   geom_line(linewidth = 1.25) +
-  geom_segment(data = segments_df,
-               aes(x = x, y = y, xend = xend, yend = yend), 
-               color = "darkorange", linewidth = 1, alpha = 0.5) +
-  geom_segment(data  = segments_df,
-               aes(x = x, y = y, xend = xend, yend = yend),
-               linetype = "dashed", linewidth = 1) +
-  geom_point(
-    data = tibble(temp = NA, performance = NA, plasticity = " "),
-    aes(x = temp, y = performance, color = plasticity),
-    alpha = 0, size = 0
-  ) +
   scale_color_manual(
     values = c(
-      "No Plasticity" = "black", 
-      "With Plasticity" = "darkred",
-      "Original Tb" = "gray", 
-      "Tb after warming" = "darkorange",
-      " " = "white"
+      "TPC without plasticity" = "black",
+      "TPC with plasticity" = "darkred",
+      "Original Tb" = "gray",
+      "Tb after warming" = "darkorange"
     ),
-    breaks = c("Original Tb", "Tb after warming", " ", "No Plasticity", "With Plasticity"),
-    labels = c("Original Tb", "Tb after warming", " ", "No Plasticity", "With Plasticity"),
-    guide = guide_legend(override.aes = list(
-      linewidth = c(2, 2, 0, 2, 2),
-      alpha = c(1, 0.5, 0, 1, 1),
-      linetype = c("solid", "solid", "solid", "solid", "solid")
-    ))
+    labels = c(
+      expression("Original T"[b]),
+      expression("T"[b]*" after warming"),
+      "TPC without plasticity",
+      "TPC with plasticity"
+    ),
+    guide = guide_legend(
+      override.aes = list(
+        linewidth = c(2, 2, 2, 2),
+        alpha = c(1, 1, 1, 1)
+      )
+    )
   ) +
-  facet_wrap(~tpc_breadth, nrow = 1, axes = "all") +
   scale_x_continuous(expand = c(0, 0)) +
   scale_y_continuous(expand = c(0, 0), limits = c(0, 1.025)) +
   theme_minimal() +
   theme(
     legend.position = "top",
     legend.title = element_blank(),
-    legend.text = element_text(size = 12),
+    legend.text = element_text(size = 14, margin = margin(r = 10, l = 2)),
+    legend.key.width = unit(1, "cm"),
+    legend.spacing.x = unit(2, "cm"),
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 16),
     strip.text = element_blank(),
     panel.grid = element_blank(),
-    axis.ticks = element_line(linewidth = 0.25),
-    panel.border = element_rect(fill = NA, color = "black", linewidth = 0.25)
+    axis.ticks = element_line(linewidth = 0.5),
+    panel.border = element_rect(fill = NA, color = "black", linewidth = 0.75),
+    plot.margin = margin(l = 10, r = 10, b = 10, t = 10),
+    plot.border = element_rect(color = NA, fill = NA)
   ) +
   labs(
-    x = expression("Body Temperature (" * degree * "C)"),
+    x = expression("Body Temperature ( " * degree * "C)"),
     y = "Fitness (W)",
-  )
-
-```
-
-In fact, to maintain the same level of fitness after a substantial increase in body temperature, the tropical organism would need to exhibit a much greater level of plasticity than the high latitude organism (Figure 2). For example, to match the fitness of the wide TPC at an ARR of 30% after a 3°C increase in body temperature, the narrow TPC needs to exhibit an ARR of 65%. This is a substantial difference in plasticity, and it is not clear that such a high level of plasticity is even possible.
-
-```{r plot-what-should-arr-be}
-#| fig-width: 5
-#| fig-height: 3
-#| out-width: "75%"
-#| fig.cap: "**Figure 2** To match the fitness of the wide TPC at an ARR of 30% after a 3°C increase in body temperature (Tb), the narrow TPC needs to exhibit an ARR of 65%." # nolint
-
-# define sequence of ARRs to test
-arrs <- seq(0, 1, by = 0.01)
-orginal_temp <- 30
-delta_temp <- 3
-
-# calculate TPC fitness across ARRs for broad TPC
-w_15 <- lapply(arrs, function(x) {
-  tpc(
-    temps = orginal_temp + delta_temp,
-    topt = orginal_temp + x * delta_temp,
-    ctmin = 20 + x * delta_temp,
-    ctmax = 35 + x * delta_temp
-  )
-}) |> unlist()
-w_30 <- lapply(arrs, function(x) {
-  tpc(
-    temps = orginal_temp + delta_temp,
-    topt = orginal_temp + x * delta_temp,
-    ctmin = 5 + x * delta_temp,
-    ctmax = 40 + x * delta_temp
-  )
-}) |> unlist()
-w_45 <- lapply(arrs, function(x) {
-  tpc(
-    temps = orginal_temp + delta_temp,
-    topt = orginal_temp + x * delta_temp,
-    ctmin = -5 + x * delta_temp,
-    ctmax = 45 + x * delta_temp
-  )
-}) |> unlist()
-
-# create data frame for plotting
-arr_df <- data.frame(
-  arr = arrs,
-  w_15 = w_15,
-  w_30 = w_30,
-  w_45 = w_45
-) |>
-  pivot_longer(
-    cols = c(w_15, w_30, w_45),
-    names_to = "tpc_breadth",
-    values_to = "fitness"
-  )
-
-# find at which ARR the fitness of the narrow TPCs are equal to the fitness of
-# the broadest TPC at ARR = 0.3
-w_broad_45 <- arr_df |> filter(tpc_breadth == "w_45", arr == 0.3) |> pull(fitness)
-arr_equal <- arr_df |>
-  filter(tpc_breadth != "w_45", fitness >= w_broad_45) |>
-  group_by(tpc_breadth) |>
-  slice(1) 
-
-# plot the phenomenon
-arr_df |>
-  ggplot(aes(x = arr, y = fitness, color = tpc_breadth)) +
-  geom_line(linewidth = 1.25) +
-  annotate(
-    geom = "segment",
-    x = 0, xend = max(arr_equal$arr, na.rm = TRUE), y = w_broad_45, yend = w_broad_45,
-    alpha = 0.75, linewidth = 1, color = "gray"
   ) +
-  annotate(
-    geom = "segment",
-    x = 0.3, xend = 0.3, y = -Inf, yend = w_broad_45,
-    color = "#36648B", linetype = "dashed"
-  ) +
-  annotate(
-    geom = "point", x = 0.3, y = w_broad_45, size = 3, color = "#36648B"
-  ) +
-  annotate(
-    geom = "point",
-    x = arr_equal$arr, y = w_broad_45, size = 3, color = c("#E69F00", "#56B4E9")
-  ) +
-  annotate(
-    geom = "segment",
-    x = arr_equal$arr, xend = arr_equal$arr, y = -Inf, yend = w_broad_45,
-    linetype = "dashed", color = c("#E69F00", "#56B4E9")
-  ) +
-  scale_color_manual(
-    values = c("#E69F00", "#56B4E9", "#36648B"),
-    labels = c("15 °C", "30 °C", "45 °C"),
-    name = "TPC breadth"
-  ) +
-  scale_x_continuous(
-    expand = c(0, 0),
-    breaks = seq(0, 1, 0.1),
-    labels = scales::percent_format(accuracy = 1)
+  facet_wrap(~tpc_breadth, nrow = 1, labeller = label_both, axes = "all")
+
+# plot panel B
+panel_b <- benefits_df |>
+  ggplot(aes(x = tpc_breadth, y = benefit)) +
+  geom_line(linewidth = 1.25, color = "black") +
+  geom_point(
+    data = benefits_df |>
+      filter(tpc_breadth %in% c(15, 30, 45)),
+    aes(x = tpc_breadth, y = benefit),
+    size = 4
   ) +
   theme_minimal() +
   theme(
-    legend.text = element_text(size = 12),
-    panel.border = element_rect(fill = NA, color = "black", linewidth = 0.5),
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 16),
+    panel.grid = element_blank(),
     axis.ticks = element_line(linewidth = 0.5),
-    panel.grid.major = element_line(linewidth = 0.05, color = "lightgray"),
-    panel.grid.minor = element_blank(),
+    axis.line = element_line(linewidth = 0.5),
+    plot.margin = margin(l = 150, r = 150),
+    plot.border = element_rect(color = NA, fill = NA)
+  ) +
+  scale_x_continuous(breaks = seq(15, 45, by = 5)) +
+  scale_y_continuous(breaks = seq(0, 0.3, by = 0.05)) +
+  labs(
+    x = expression("TPC Breadth (T "[br] * ")"),
+    y = expression("Benefit of plasticity")
+  )
+
+# combine panels A and B
+ggarrange(
+  panel_a, panel_b,
+  ncol = 1, nrow = 2,
+  heights = c(1.25, 1),
+  labels = c("A", "B"),
+  font.label = list(size = 20, face = "bold"),
+  label.x = c(0, 0.2),
+  label.y = c(1, 1.1)
+)
+
+```
+
+```{r plot-figure-2}
+#| fig-width: 4.5
+#| fig-height: 4
+#| out-width: "75%"
+#| fig.cap: |
+#|  **Figure 2**: Organisms with narrow thermal performance curves (TPCs) must exhibit greater plasticity to match the fitness of organisms with broad TPCs after warming. Results here are from the scenario described in Figure 1, in which taxa with different TPC breadths experience a 3 °C increase in body temperature (T<sub>b</sub>). The organisms with the narrow (15 °C) and intermediate (30 °C) TPC would need to exhibit Acclimation Response Ratios (ARRs) of 0.77 and 0.54, respectively (yellow and light blue lines) to maintain the same level of fitness as the organism with the wide TPC (45 °C) exhibiting an ARR of 0.30 (dark blue lines).
+
+# define sequence of ARRs to test
+arrs <- seq(0, 1, by = 0.01)
+original_temp <- 30
+delta_temp <- 3
+
+# TPC baseline params for the three focal breadths
+tpc_params <- tibble(
+  tpc_breadth = c("w_15", "w_30", "w_45"),
+  ctmin = c(20, 5, -5),
+  ctmax = c(35, 40, 45)
+)
+
+arr_df <- expand_grid(tpc_params, arr = arrs) |>
+  rowwise() |>
+  mutate(
+    fitness = tpc(
+      temps = original_temp + delta_temp,
+      topt  = original_temp + arr * delta_temp,
+      ctmin = ctmin + arr * delta_temp,
+      ctmax = ctmax + arr * delta_temp
+    )
+  ) |>
+  ungroup() |>
+  select(arr, tpc_breadth, fitness)
+
+# fitness of the broad TPC at ARR = 0.3
+fitness_wide <- arr_df |>
+  filter(tpc_breadth == "w_45", arr == 0.3) |>
+  pull(fitness)
+
+# fint ARRs the other TPCs need to match fitness
+arr_to_match_df <- arr_df |>
+  group_by(tpc_breadth) |>
+  mutate(
+    arr_to_match_wide = arr[which.min(abs(fitness - fitness_wide))]
+  ) |>
+  slice(1) |>
+  ungroup()
+
+# plot figure 2
+ggplot(arr_df, aes(x = arr, y = fitness, color = tpc_breadth)) +
+  geom_line(linewidth = 1.25) +
+  annotate(
+    geom = "segment",
+    x = 0,
+    xend = max(arr_to_match_df$arr_to_match_wide),
+    y = fitness_wide,
+    yend = fitness_wide,
+    color = "darkgray",
+    linewidth = 0.75
+  ) +
+  geom_segment(
+    data = arr_to_match_df,
+    aes(
+      x = arr_to_match_wide,
+      xend = arr_to_match_wide,
+      y = -Inf, yend = fitness_wide,
+      color = tpc_breadth
+    ),
+    linetype = 2
+  ) +
+  geom_point(
+    data = arr_to_match_df,
+    aes(
+      x = arr_to_match_wide,
+      y = fitness_wide,
+      color = tpc_breadth
+    ),
+    size = 3,
+    show.legend = FALSE
+  ) +
+  scale_x_continuous(expand = c(0, 0), limits = c(0, 1)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0.6, 1.01)) +
+  scale_color_manual(
+    values = c("#E69F00", "#56B4E9", "#36648B"),
+    labels = c("15 °C", "30 °C", "45 °C"),
+    name = expression("T"[br]*" ")
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 16),
+    legend.text = element_text(size = 14,  margin = margin(r = 10, l = 2)),
+    legend.title = element_text(size = 16, face = "bold"),
+    legend.position = "top",
+    panel.grid = element_blank(),
+    axis.ticks = element_line(linewidth = 0.5),
+    axis.line = element_line(linewidth = 0.5),
+    plot.margin = margin(l = 15, r = 15, t = 10, b = 10)
   ) +
   labs(
-    x = "Acclimation Response Ratio (ARR)",
-    y = "Fitness after a 3°C increase in Tb"
+    x = expression("Acclimation Response Ratio (ARR)"),
+    y = expression("Fitness (W)")
   )
 ```
 
-## Incorporating Variability in Body Temperature
+## Incorporating within-season variability in body temperature
 
-Let us now revisit the original example, but with one fundamental difference: both tropical and high-latitude organisms can now experience a single body temperature or a distribution of body temperatures (Figure 4). If they experience a distribution of body temperatures, we assume that their TPCs have evolved a thermal safety margin that maximizes fitness given the body temperature variability they experience. As before, the tropical organism with a narrow TPC experiences a relatively greater fitness benefit from plasticity than the high latitude organism with a wide TPC. However, when variability is incorporated, two patterns emerge. First, predictably, the expected fitness of the TPC (see additional methods) is reduced when experienced body temperatures become variable, a consequence of further deviations from its T<sub>opt</sub>. Second, the benefit of plasticity is reduced for both organisms when experiencing a variable body temperature regime, yet this reduction is most notable in the narrow compared to the broad TPC. This is because, by evolving a thermal safety margin, the organism is already partially buffered against changes in mean temperature, and thus the additional benefits of plasticity are reduced. From this, we can conclude that plasticity is not only most beneficial for organisms with narrow thermal tolerances but also for those that experience more stable body temperatures. 
+We now build on the model by adding variation around the mean body temperature experienced at each time point, represented by the standard deviation of body temperature, $\sigma_{T_b}$ (Figure 4). This can be thought of as, for example, variation in body temperature experienced within a season, and thus we refer to it as “within-season body temperature variation.” As before, we assume that these organisms have evolved to maximize initial fitness, which results in each taxon having a different initial mean body temperature (Figure 3A). This is because TPCs are asymmetrical, which causes fitness to be maximized when mean $T_b < T_{opt}$ in the presence of thermal variability (i.e., Jensen’s inequality; Denny 2017, Martin and Huey 2008, Ruel & Ayres 1999). Within-season body temperature variation also reduces the maximum expected fitness that organisms can achieve (see also Vasseur et al 2014), and the effect is greatest for organisms with narrow TPCs (Figure 3).
 
-```{r load otsm function}
-#| echo: false
+If we again assume an increase in mean body temperature of 3 °C, several patterns of note emerge. First, the benefit of plasticity decreases as within-season body temperature variation increases for all organisms (Figure 3). This is consistent with previous theoretical treatments with symmetrical tolerance curves (Gabriel and Lynch 1992), and means that, for two organisms with the same thermal tolerance breadth, the one with a more stable within-season body temperature distribution will benefit most from thermal plasticity. 
+
+Second, the extent to which within-season body temperature variation reduces the benefits of plasticity is dependent on TPC breadth. As within-season body temperature variation increases, the narrow TPC organism experiences the largest decrease in the benefit of plasticity, while the wide TPC organism is affected the least (compare points within a given TPC breadth in Figure 3B). In addition, within-season body temperature variation changes who benefits the most from plasticity. When $\sigma_{T_b} = 0, 2, or 5$ °C (the purple, blue, and green lines in Figure 3B, respectively), the narrow TPC organism gains more from plasticity than the wide TPC organism. However, when $\sigma_{T_b} = 10$ °C, the narrow TPC organism benefits least, and the wide TPC organism benefits most (yellow line in Figure 3B).
+
+```{r plot-figure-3}
+#| fig-width: 8
+#| fig-height: 8
+#| fig.cap: |
+#|  **Figure 3**: Examples of the effect of constitutive thermal breadth and within-season body temperature variation on the benefits of plasticity. (A) Thermal performance curve (TPC) breadth and within-season variation in the distribution of body temperatures, represented by the standard deviation (σTb), interact to determine plasticity benefits. Note that under variable within-season body temperatures, initial fitness (gray horizontal lines) is not 1 due to Jensen’s inequality (see text). After a 3 °C increase in mean body temperature (gray vs orange vertical lines and areas), the organisms shift their TPCs with an acclimation response ratio (ARR) of 0.30. The expected fitness benefit of plasticity (difference between the red and black horizontal lines) is greatest for the narrowest TPC, but for all TPCs, it decreases when body temperatures are more variable. (B) The expected benefit of plasticity as a function of both TPC breadth and within-season body temperature variation, with σTb set to 0 as in Figure 1, as well as 2, 5, or 10 °C. 
+
+# define expected fitness function
 exp_w <- function(topt, ctmin, ctmax, mean_tb, sd_tb) {
-
-  # stop if sd_tb is negative
-  if (sd_tb < 0) {
-    stop("Standard deviation of body temperature cannot be negative.")
-  }
-  
-  # if sd_tb is exactly 0, return the TPC value at mean_tb
+  if (sd_tb < 0) stop("sd_tb cannot be negative")
   if (sd_tb == 0) {
     tpc(mean_tb, topt, ctmin, ctmax)
-
-  # if sd_tb > 0 integrate the product of the TPC and the normal distribution
   } else {
-
-    # function to calculate integrand
-    integrand <- function(temps) {
-      tpc(temps, topt, ctmin, ctmax) * dnorm(temps, mean = mean_tb, sd = sd_tb)
-    }
-
-    # integrate
-    integrate(integrand, lower = -30, upper = 60)$value
+    integrate(
+      \(t) tpc(t, topt, ctmin, ctmax) * dnorm(t, mean = mean_tb, sd = sd_tb),
+      lower = -30, upper = 60
+    )$value
   }
 }
-otsm <- function(ctmin, topt, ctmax, sd_tb, sk_tb = 1) {
 
-  if (sd_tb == 0) {
-    0
-  } else {
-    # function to calculate expected fitness for a given mean body temperature
-    exp_w_mean_tb <- function(mean_tb) {
-      exp_w(ctmin = ctmin, topt = topt, ctmax = ctmax,
-            sd_tb = sd_tb, mean_tb = mean_tb)
-    }
-
-    # optimize to find mean body temperature that maximizes expected fitness
-    opt_result <- optimize(exp_w_mean_tb, lower = ctmin, upper = ctmax, maximum = TRUE)
-
-    # return optimal thermal safety margin
-    topt - opt_result$maximum
+# define OTSM function
+otsm <- function(ctmin, topt, ctmax, sd_tb) {
+  if (sd_tb == 0) 0 else {
+    topt - optimize(
+      \(mean_tb) exp_w(ctmin = ctmin, topt = topt, ctmax = ctmax, # nolint
+                       sd_tb = sd_tb, mean_tb = mean_tb),
+      lower = ctmin, upper = ctmax, maximum = TRUE
+    )$maximum
   }
 }
-```
-
-```{r plot-phenomenon-with-variability,  warning = FALSE, message = FALSE}
-#| code-fold: true
-#| fig.width: 11
-#| fig.cap: "**Figure 4**: The benefits of thermal plasticity depend on both the breadth of the thermal performance curve (TPC) and the variability in body temperature (T<sub>b</sub>) an organism experiences. In this example, the top and bottom rows on panel A show TPCs with narrow and wide constitutive breadth, respectively, while the left and right columns assume that an organism is experiencing a single or a distribution of body temperatures. As in Figure 2, when experiencing an increase of 3 °C in mean body temperature (gray and orange vertical lines, and orange shaded area for the variable body temperature distribution), the narrow TPC benefits from plasticity more than a broad TPC (the black and red curves are the original and plastically compensated TPCs with an ARR = 30%, while the horizontal dashed lines of the same color represent that TPC’s' expected fitness, left column). However, when variability in T<sub>b</sub> is introduced (right column), the extent of this benefit is reduced, particularly for the narrow TPC. Panel B shows the changes in expected fitness values due to plasticity for narrow and wide TPCs experiencing a single T<sub>b</sub> (circles) or a distribution of T<sub>b</sub> (triangles). Here, we can clearly see that the improvement in fitness due to plasticity is reduced for narrow TPCs experiencing variable T<sub>b</sub>, but it practically does not change (andeven improves slightly) for broad TPCs." # nolint
 
 # define parameters
 topt <- 30
-ctmins <- c(20, 5, -5)
-cmtaxs <- c(35, 40, 45)
 arr <- 0.3
 delta_temp <- 3
 tb_var <- c(0, 2, 5, 10)
-tpc_widths <- c(15, 30, 45)
-plasticity <- c("No Plasticity", "With Plasticity")
+tpc_widths <- seq(12, 48, by = 1)
+plasticity <- c(0, 1)
 
-# initialize expected fitness data frame
-exp_w_df <- expand.grid(
-  tpc_width = tpc_widths,
-  plasticity = plasticity,
-  tb_var = tb_var
+# data frame of TPC parameters
+tpc_params <- tibble(
+  tpc_width = tpc_widths
 ) |>
+  mutate(
+    ctmin = topt - (tpc_width * (2 / 3)),
+    ctmax = topt + (tpc_width * (1 / 3))
+  )
+
+# data frame of expected fitness 
+exp_w_df <- expand_grid(tpc_params, plasticity = plasticity, tb_var = tb_var) |>
   arrange(tpc_width, plasticity, tb_var) |>
-  mutate(expected_fitness = NA, original_expected_fitness = NA)
-exp_w_df$ctmin <- case_when(
-  exp_w_df$tpc_width == 15 ~ ctmins[1],
-  exp_w_df$tpc_width == 30 ~ ctmins[2],
-  exp_w_df$tpc_width == 45 ~ ctmins[3]
-)
-exp_w_df$ctmax <- case_when(
-  exp_w_df$tpc_width == 15 ~ cmtaxs[1],
-  exp_w_df$tpc_width == 30 ~ cmtaxs[2],
-  exp_w_df$tpc_width == 45 ~ cmtaxs[3]
-)
+  rowwise() |>
+  mutate(
+    mean_tb = topt - otsm(
+      ctmin = ctmin, topt = topt, ctmax = ctmax, sd_tb = tb_var
+    ),
+    plastic_shift = ifelse(plasticity == 1, arr * delta_temp, 0),
+    initial_ew = exp_w(
+      topt = topt,
+      ctmin = ctmin,
+      ctmax = ctmax,
+      mean_tb = mean_tb,
+      sd_tb = tb_var
+    ),
+    final_ew = exp_w(
+      topt    = topt + plastic_shift,
+      ctmin   = ctmin + plastic_shift,
+      ctmax   = ctmax + plastic_shift,
+      mean_tb = mean_tb + delta_temp,
+      sd_tb   = tb_var
+    )
+  ) |>
+  ungroup() |>
+  select(-plastic_shift)
 
-# calculate mean body temperature that maximizes expected fitness
-for (i in seq_len(nrow(exp_w_df))) {
-  exp_w_df$mean_tb[i] <- topt - otsm(
-    ctmin = exp_w_df$ctmin[i],
-    topt = topt,
-    ctmax = exp_w_df$ctmax[i],
-    sd_tb = exp_w_df$tb_var[i]
-  )
-}
-
-# populate data frame with expected fitness values
-for (i in seq_len(nrow(exp_w_df))) {
-  plasticity_on <- ifelse(
-    exp_w_df$plasticity[i] == "With Plasticity", TRUE, FALSE
-  )
-  exp_w_df$original_expected_fitness[i] <- exp_w(
-    topt = topt,
-    ctmin = exp_w_df$ctmin[i],
-    ctmax = exp_w_df$ctmax[i],
-    mean_tb = exp_w_df$mean_tb[i],
-    sd_tb = exp_w_df$tb_var[i]
-  )
-  exp_w_df$expected_fitness[i] <- exp_w(
-    topt = topt + ifelse(plasticity_on, arr * delta_temp, 0),
-    ctmin = exp_w_df$ctmin[i] + ifelse(plasticity_on, arr * delta_temp, 0),
-    ctmax = exp_w_df$ctmax[i] + ifelse(plasticity_on, arr * delta_temp, 0),
-    mean_tb = exp_w_df$mean_tb[i] + delta_temp,
-    sd_tb = exp_w_df$tb_var[i]
-  )
-}
-
-# Create df for plotting TPCs with and without plasticity and different widths
-tpc_var_df <- expand.grid(
+# data frame with TPCs of varying depths and plasticity levels
+tpc_var_df <- expand_grid(
+  tpc_params |> filter(tpc_width %in% c(15, 30, 45)),
   temps = temps,
-  tpc_width = tpc_widths,
   plasticity = plasticity
 ) |>
   arrange(tpc_width, plasticity) |>
-  mutate(performance = NA) |>
+  rowwise() |>
   mutate(
-    ctmin = case_when(
-      tpc_width == 15 ~ ctmins[1],
-      tpc_width == 30 ~ ctmins[2],
-      tpc_width == 45 ~ ctmins[3]
-    ),
-    ctmax = case_when(
-      tpc_width == 15 ~ cmtaxs[1],
-      tpc_width == 30 ~ cmtaxs[2],
-      tpc_width == 45 ~ cmtaxs[3]
+    plastic_shift = ifelse(plasticity == 1, arr * delta_temp, 0),
+    performance = tpc(
+      temps = temps,
+      topt = topt + plastic_shift,
+      ctmin = ctmin + plastic_shift,
+      ctmax = ctmax + plastic_shift
     )
-  )
-for (i in seq_len(nrow(tpc_var_df))) {
-  tpc_var_df$performance[i] <- tpc(
-    temps = tpc_var_df$temps[i],
-    topt = topt + ifelse(tpc_var_df$plasticity[i] == "With Plasticity", arr * delta_temp, 0), # nolint
-    ctmin = tpc_var_df$ctmin[i] + ifelse(tpc_var_df$plasticity[i] == "With Plasticity", arr * delta_temp, 0), # nolint
-    ctmax = tpc_var_df$ctmax[i] + ifelse(tpc_var_df$plasticity[i] == "With Plasticity", arr * delta_temp, 0) # nolint
-  )
-}
+  ) |>
+  ungroup() |>
+  select(-plastic_shift)
 
-# Create df to plot Tb distribution using dnorm
-tb_dist_df <- expand.grid(temps = temps, tb_var = tb_var) |>
+# data frame of Tb distributions at different variability levels
+tb_dist_df <- expand_grid(
+  tpc_params |> filter(tpc_width %in% c(15, 30, 45)),
+  temps = temps,
+  tb_var = tb_var
+) |>
   arrange(tb_var) |>
-  mutate(probability = NA)
-for (i in seq_len(nrow(tb_dist_df))) {
-  tb_dist_df$probability[i] <- dnorm(
-    tb_dist_df$temps[i],
-    mean = topt + delta_temp,
-    sd = tb_dist_df$tb_var[i]
-  )
-}
-
-# create data frame to plot changes in fitness as a result of plasticity
-fitness_change_df <- expand.grid(tpc_width = tpc_widths, tb_var = tb_var) |>
-  arrange(tpc_width, tb_var) |>
-  mutate(fitness_change = NA) |>
+  rowwise() |>
   mutate(
-    ctmin = case_when(
-      tpc_width == 15 ~ ctmins[1],
-      tpc_width == 30 ~ ctmins[2],
-      tpc_width == 45 ~ ctmins[3]
+    mean_tb = topt - otsm(
+      ctmin = ctmin, topt = topt, ctmax = ctmax, sd_tb = tb_var
     ),
-    ctmax = case_when(
-      tpc_width == 15 ~ cmtaxs[1],
-      tpc_width == 30 ~ cmtaxs[2],
-      tpc_width == 45 ~ cmtaxs[3]
-    )
+    probability = dnorm(temps, mean = mean_tb + delta_temp, sd = tb_var)
+  ) |>
+  ungroup()
+
+
+# fitness change from plasticity across breadths and variability levels
+fitness_change_df <- exp_w_df |>
+  group_by(tpc_width, tb_var) |>
+  summarize(
+    fitness_change = final_ew[plasticity == 1] - final_ew[plasticity == 0],
+    .groups = "drop"
   )
 
-# populate data frame with fitness change values
-for (i in seq_len(nrow(fitness_change_df))) {
-  fitness_change_df$fitness_change[i] <- exp_w(
-    topt = topt + arr * delta_temp,
-    ctmin = fitness_change_df$ctmin[i] + arr * delta_temp,
-    ctmax = fitness_change_df$ctmax[i] + arr * delta_temp,
-    mean_tb = topt + delta_temp,
-    sd_tb = fitness_change_df$tb_var[i]) - exp_w(
-    topt = topt,
-    ctmin = fitness_change_df$ctmin[i],
-    ctmax = fitness_change_df$ctmax[i],
-    mean_tb = topt + delta_temp,
-    sd_tb = fitness_change_df$tb_var[i]
-  )
-}
-
-# add baseline fitness values to fitness change data frame
-fitness_change_df <- fitness_change_df |>
-  left_join(
-    exp_w_df |>
-      filter(plasticity == "With Plasticity") |>
-      select(tpc_width, tb_var, expected_fitness),
-    by = c("tpc_width", "tb_var")
-  )
-
-# plot expected fitness values
-phenomenon_plot <- ggplot() +
+# plot figure 3 panel A
+panel_a <- ggplot() +
   geom_vline(
-    data = tibble(
-      xintercept = c(30, 30 + delta_temp),
-      plasticity = c("Original Tb", "Tb after warming")
+    data = exp_w_df |>
+      filter(tb_var %in% c(2, 5)) |>
+      filter(tpc_width %in% c(15, 30, 45)) |>
+      select(tpc_width, tb_var, mean_tb) |>
+      mutate(
+        original_tb = mean_tb,
+        final_tb = mean_tb + delta_temp
+      ) |>
+      distinct() |>
+      select(-mean_tb) |>
+      pivot_longer(
+        cols = c(original_tb, final_tb),
+        names_to = "tb_var_type",
+        values_to = "mean_tb"
+      ),
+    aes(xintercept = mean_tb, color = tb_var_type),
+    alpha = 0.6, key_glyph = "path", linewidth = 1
+  ) +
+  geom_area(
+    data = tb_dist_df |>
+      filter(tb_var %in% c(2, 5)) |>
+      filter(tpc_width %in% c(15, 30, 45)) |>
+      mutate(
+        final_tb = temps,
+        original_tb = temps - delta_temp
+      ) |>
+      pivot_longer(
+        cols = c(original_tb, final_tb),
+        names_to = "tb_var_type",
+        values_to = "tb"
+      ) |>
+      select(tb_var, tpc_width, tb_var_type, tb, probability),
+    aes(x = tb, y = probability, fill = tb_var_type, group = tb_var_type),
+    position = "identity",
+    alpha = 0.5,
+    show.legend = FALSE
+  ) +
+  geom_segment(
+    data = exp_w_df |>
+      filter(tb_var %in% c(2, 5)) |>
+      filter(tpc_width %in% c(15, 30, 45)),
+    aes(
+      x = -Inf, xend = mean_tb + delta_temp,
+      y = final_ew, yend = final_ew,
+      color = as.factor(plasticity)
     ),
-    aes(xintercept = xintercept, color = plasticity),
-    alpha = 0.5, linewidth = 1.25, key_glyph = "path"
+    alpha = 0.6, linewidth = 1
   ) +
-  geom_area(
-    data = tb_dist_df |> filter(tb_var %in% c(2, 5)),
-    aes(x = temps - delta_temp, y = probability),
-    alpha = 0.5,
-    fill = "gray"
-  ) +
-  geom_area(
-    data = tb_dist_df |> filter(tb_var %in% c(2, 5)),
-    aes(x = temps, y = probability),
-    alpha = 0.5,
-    fill = "darkorange"
+  geom_segment(
+    data = exp_w_df |>
+      filter(tb_var %in% c(2, 5)) |>
+      filter(tpc_width %in% c(15, 30, 45)) |>
+      filter(plasticity == 0),
+    aes(
+      x = -Inf, xend = mean_tb,
+      y = initial_ew, yend = initial_ew
+    ),
+    alpha = 0.6, color = "gray", linewidth = 1
   ) +
   geom_line(
     data = tpc_var_df,
-    aes(x = temps, y = performance, color = plasticity),
-    linewidth = 1.25, alpha = 0.75
-  ) +
-  geom_segment(
-    data = exp_w_df |> filter(tb_var %in% c(2, 5)),
     aes(
-      x = -Inf, xend = 30,
-      y = original_expected_fitness, yend = original_expected_fitness
+      x = temps, y = performance,
+      color = as.factor(plasticity), group = plasticity
     ),
-    color = "gray", alpha = 0.5
+    linewidth = 1.25
   ) +
-  geom_segment(
-    data = exp_w_df |> filter(tb_var %in% c(2, 5)),
-    aes(
-      x = -Inf, xend = 30,
-      y = original_expected_fitness, yend = original_expected_fitness
-    ),
-    linetype = "dashed"
-  ) +
-  geom_segment(
-    data = exp_w_df |> filter(tb_var %in% c(2, 5)),
-    aes(
-      x = -Inf, xend = 30 + delta_temp,
-      y = expected_fitness, yend = expected_fitness,
-    ),
-    color = "darkorange", alpha = 0.5
-  ) +
-  geom_segment(
-    data = exp_w_df |> filter(tb_var %in% c(2, 5)),
-    aes(
-      x = -Inf, xend = 30 + delta_temp,
-      y = expected_fitness, yend = expected_fitness,
-      color = plasticity
-    ),
-    linetype = "dashed"
-  ) +
-  geom_point(
-    data = tibble(temps = NA_real_, performance = NA_real_, plasticity = " "),
-    aes(x = temps, y = performance, color = plasticity),
-    alpha = 0, size = 0
-  ) +
-  scale_y_continuous(limits = c(0, 1.05), expand = c(0, 0)) +
-  scale_x_continuous(expand = c(0, 0)) +
-  scale_color_manual(
-    values = c(
-      "No Plasticity" = "black", "With Plasticity" = "darkred",
-      "Original Tb" = "gray", "Tb after warming" = "darkorange",
-      " " = "white"
-    ),
-    breaks = c("Original Tb", "Tb after warming", " ", "No Plasticity", "With Plasticity"),
-    labels = c("Original Tb", "Tb after warming", "", "No Plasticity", "With Plasticity"),
-    guide = guide_legend(override.aes = list(
-      linewidth = c(1.5, 1.5, 0, 1.25, 1.25),
-      alpha = c(0.5, 0.5, 0, 1, 1),
-      linetype = c("solid", "solid", "blank", "solid", "solid")
-    ))
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 1.025)) +
+  scale_x_continuous(expand = c(0, 0), limits = c(0, 50)) +
+  labs(
+    x = expression("Body Temperature ( " * degree * "C)"),
+    y = "Expected Fitness [ E(W) ]"
   ) +
   facet_grid(
     tb_var ~ tpc_width, axes = "all",
@@ -625,11 +583,27 @@ phenomenon_plot <- ggplot() +
       )
     )
   ) +
-  labs(
-    x = expression("Body Temperature (" * degree * "C)"),
-    y = "Expected fitness",
-    color = "Plasticity",
-    title = "A"
+  scale_color_manual(
+    values = c(
+      "0"           = "black",
+      "1"           = "darkred",
+      "original_tb" = "gray",
+      "final_tb"    = "darkorange"
+    ),
+    breaks = c("original_tb", "final_tb", "0", "1"),
+    labels = expression(
+      "Original T"[b],
+      "T"[b] * " after warming",
+      "TPC without plasticity",
+      "TPC with plasticity"
+    ),
+    name = NULL
+  ) +
+  scale_fill_manual(
+    values = c(
+      "original_tb" = "gray",
+      "final_tb"    = "darkorange"
+    )
   ) +
   theme_minimal() +
   theme(
@@ -637,102 +611,103 @@ phenomenon_plot <- ggplot() +
     strip.background = element_blank(),
     legend.position = "top",
     legend.title = element_blank(),
-    legend.text = element_text(size = 12),
-    panel.border = element_rect(fill = NA, color = "black"),
-    axis.ticks = element_line(),
-    panel.grid = element_blank(),
-    plot.title = element_text(size = 20, face = "bold", vjust = -8),
+    legend.text = element_text(size = 11, margin = margin(r = 6, l = 1)),
+    legend.margin = margin(l = 0.01, r = 0.01),
+    legend.spacing.x = unit(0.1, "cm"),
+    panel.border = element_rect(fill = NA, color = "black", linewidth = 0.5),
+    axis.ticks = element_line(linewidth = 0.25),
+    panel.grid = element_blank()
   ) +
   coord_cartesian(xlim = c(0, 50))
 
-# plot change in fitness as a result of plasticity
-change_plot <- fitness_change_df |>
+# plot panel b
+panel_b <- fitness_change_df |>
   ggplot(aes(x = tpc_width, y = fitness_change, color = as.factor(tb_var))) +
-  geom_point(size = 3) +
-  geom_line(aes(group = as.factor(tb_var)), linewidth = 1.25) +
+  geom_line(linewidth = 1.25) +
+  geom_point(
+    data = fitness_change_df |>
+      filter(tpc_width %in% c(15, 30, 45)),
+    aes(x = tpc_width, y = fitness_change, color = as.factor(tb_var)),
+    size = 2.5,
+    show.legend = FALSE
+  ) +
   scale_color_manual(
-    values = scales::viridis_pal(option = "D")(length(unique(fitness_change_df$tb_var))),
-    labels = c("0", "2", "5", "10"),
-    name = expression(sigma[T[b]])
+    values = scales::viridis_pal(option = "D")(length(unique(fitness_change_df$tb_var))), # nolint
+    name = expression(sigma[T[b]]),
+    labels = c("0 °C", "2 °C", "5 °C", "10 °C")
   ) +
-  labs(
-    y = "Benefit of plasticity (change in expected fitness)",
-    x = "TPC breadth (°C)",
-    title = "B"
-  ) +
-  scale_x_continuous(breaks = c(15, 30, 45)) +
+  scale_x_continuous(breaks = seq(15, 45, by = 5), expand = c(0, 0)) +
   theme_minimal() +
   theme(
-    axis.line = element_line(),
-    axis.ticks = element_line(),
-    legend.position = c(0.8, 0.75),
+    axis.text = element_text(size = 10),
+    axis.title = element_text(size = 14),
+    legend.text = element_text(size = 14),
+    legend.title = element_text(size = 16, face = "bold"),
+    legend.position = "right",
     panel.grid = element_blank(),
-    plot.margin = margin(t = 100, b = 50),
-    legend.title = element_text(size = 12, face = "bold"),
-    plot.title = element_text(size = 20, face = "bold"),
-    plot.title.position = "panel"
+    axis.ticks = element_line(linewidth = 0.5),
+    axis.line = element_line(linewidth = 0.5),
+    plot.margin = margin(l = 125, r = 125, t = 10, b = 10),
+  ) +
+  labs(
+    x = expression("TPC breadth (T "[br] * ")"),
+    y = expression("Benefit of plasticity")
   )
 
-# combine plots
+# combine panel a and b
 ggarrange(
-  phenomenon_plot, change_plot,
-  nrow = 1, ncol = 2,
-  widths = c(2, 0.75)
+  panel_a, panel_b,
+  ncol = 1, nrow = 2,
+  heights = c(3, 1.5),
+  labels = c("A", "B"),
+  font.label = list(size = 20, face = "bold"),
+  label.x = c(0, 0.2),
+  label.y = c(1, 1.1)
 )
+
 ```
 
-If we consider the TPC breadth that benefits most from plasticity across different ARR assumptions and levels of body temperature variability, we find that the benefits of plasticity are greatest for organisms with narrow TPC, substantial acclimation capacity (greater ARR), experiencing stable body temperature distributions, and only when experiencing moderate degrees of cooling and warming. For wider TPCs experiencing variable body temperature distributions, plasticity becomes increasingly less beneficial at any ARR. In fact, in some cases, plastically changing TPCs can reduce fitness when changes in mean body temperature are small but body temperature variability is high (Figure 4). 
+Within-season body temperature variation also interacts with TPC breadth to affect the benefits of evolving greater plasticity (i.e., increasing ARR; Figure 4). The narrow constitutive TPC organism gains a greater net fitness benefit from evolving a higher ARR when within-season body temperature variation is low (Figure 4). This can be seen as differences in the slopes of the relationship between fitness benefit of plasticity and ARR when σTb is small (Figure 4, left; Figure 2). However, as within-season body temperature variation increases, the benefit  of evolving greater plasticity becomes similar for all TPCs (note slopes in Figure 4, center and right). Overall, greater within-season body temperature variation decreases the fitness benefit of evolving greater plasticity regardless of TPC breadth (Figure 4).
 
-```{r plot-what-arr-should-be}
-#| fig.width: 8
-#| fig.height: 3.5
-#| fig.align: "center"
-# define sequence of ARRs to test
+```{r plot-figure-4}
+#| fig-width: 7
+#| fig-height: 5
+#| fig.cap: |
+#|  **Figure 4**: Effects of constitutively expressed thermal performance (TPC) breadth and within-season temperature variation (body temperature standard deviation, σTb) on the benefits of thermal plasticity across a range of plasticity levels (Acclimation Response Ratios, ARR). Results are based on a mean body temperature increase of 3 °C. Relatively stable within-season body temperatures (σTb = 2 °C, left panel) lead to greater benefits of plasticity than more variable within-season body temperatures (σTb = 5 or 10 °C, center and right panel, respectively) regardless of TPC breadth. In addition, when within-season body temperatures are more stable,  the benefit of evolving greater plasticity (i.e., higher ARR) is larger, and especially for narrow TPCs (compare steepness of the colored lines between σTb values and TPC breadths). 
+
+# define parameters
 arrs <- seq(0, 1, by = 0.01)
-orginal_temp <- 30
+original_temp <- 30
 delta_temp <- 3
-tpc_breadths <- c(15, 30, 45)
-tb_var <- c(2, 5, 10)
-combinations <- expand.grid(
-  arr = arrs,
-  tpc_breadth = tpc_breadths,
-  tb_var = tb_var
-)
-combinations$ctmin <- case_when(
-  combinations$tpc_breadth == 15 ~ ctmins[1],
-  combinations$tpc_breadth == 30 ~ ctmins[2],
-  combinations$tpc_breadth == 45 ~ ctmins[3]
-)
-combinations$ctmax <- case_when(
-  combinations$tpc_breadth == 15 ~ cmtaxs[1],
-  combinations$tpc_breadth == 30 ~ cmtaxs[2],
-  combinations$tpc_breadth == 45 ~ cmtaxs[3]
-)
-combinations$expected_fitness <- NA
+tb_vars <- c(2, 5, 10)
 
-# define funcction to calculate expected fitness for a given variability
-exp_fitness_var <- function(arr, sd_tb, ctmin, ctmax) {
-  exp_w(
-    topt = orginal_temp + arr * delta_temp,
-    ctmin = ctmin + arr * delta_temp,
-    ctmax = ctmax + arr * delta_temp,
-    mean_tb = orginal_temp + delta_temp,
-    sd_tb = sd_tb
+# TPC baseline params for the three focal breadths
+tpc_params <- tibble(
+  tpc_breadth = c("w_15", "w_30", "w_45"),
+  ctmin = c(20, 5, -5),
+  ctmax = c(35, 40, 45)
+)
+
+# calculate OTSMs and fitness for each combination
+arr_df <- expand_grid(tpc_params, arr = arrs, tb_var = tb_vars) |>
+  rowwise() |>
+  mutate(
+    original_mean_tb = original_temp - otsm(
+      ctmin = ctmin, topt = original_temp, ctmax = ctmax, sd_tb = tb_var
+    )
+  ) |>
+  mutate(
+    fitness = exp_w(
+      topt = original_temp + arr * delta_temp,
+      ctmin = ctmin + arr * delta_temp,
+      ctmax = ctmax + arr * delta_temp,
+      mean_tb = original_mean_tb + delta_temp,
+      sd_tb = tb_var
+    )
   )
-}
 
-# populate data frame with expected fitness values
-for (i in seq_len(nrow(combinations))) {
-  combinations$expected_fitness[i] <- exp_fitness_var(
-    arr = combinations$arr[i],
-    sd_tb = combinations$tb_var[i],
-    ctmin = combinations$ctmin[i],
-    ctmax = combinations$ctmax[i]
-  )
-}
-
-combinations |>
-  ggplot(aes(x = arr, y = expected_fitness, color = as.factor(tpc_breadth))) +
+arr_df |>
+  ggplot(aes(x = arr, y = fitness, color = as.factor(tpc_breadth))) +
   geom_line(linewidth = 1.25) +
   facet_wrap(~tb_var, labeller = labeller(tb_var = as_labeller(c(
     "2" = "sigma[T[b]] == 2",
@@ -743,41 +718,137 @@ combinations |>
   scale_color_manual(
     values = c("#E69F00", "#56B4E9", "#36648B"),
     labels = c("15 °C", "30 °C", "45 °C"),
-    name = "TPC breadth"
+    name = expression("T"[br] *" ")
   ) +
   scale_x_continuous(
     expand = c(0, 0),
-    breaks = seq(0, 1, 0.2),
-    labels = scales::percent_format(accuracy = 1)
+    breaks = seq(0, 1, 0.2)
   ) +
   theme_minimal() +
   theme(
-    legend.text = element_text(size = 12),
-    panel.border = element_rect(fill = NA, color = "black", linewidth = 0.5),
+    axis.text = element_text(size = 10),
+    axis.title = element_text(size = 14),
+    legend.text = element_text(size = 14,  margin = margin(r = 10, l = 2)),
+    legend.title = element_text(size = 16, face = "bold"),
+    legend.position = "top",
+    panel.grid = element_blank(),
     axis.ticks = element_line(linewidth = 0.5),
-    panel.grid.major = element_line(linewidth = 0.05, color = "lightgray"),
-    panel.grid.minor = element_blank(),
-    strip.text = element_text(size = 14, face = "bold")
+    panel.border = element_rect(fill = NA, color = "black", linewidth = 0.75),
+    plot.margin = margin(l = 15, r = 15, t = 10, b = 10),
+    strip.text = element_text(size = 14),
   ) +
   labs(
-    x = "Acclimation Response Ratio (ARR)",
-    y = "Expected fitness after a 3°C increase in Tb",
-    color = "TPC breadth"
+    x = expression("Acclimation Response Ratio (ARR)"),
+    y = expression("Expected Fitness after " * Delta * T[b] == 3~"°C")
   )
 
 ```
 
-## Conclusion & Future directions
+## The effects of changes in mean body temperature
 
-- Exploring these effects when incorporating skewness in both the TPC and the distribution of body temperatures experienced. 
-- Thermoregulatory behavior further dampens the benefits of plasticity. Plasticity might be lower in behaviorally thermoregulating organisms than in thermoconforming organisms. Do we see that?
-- What is the true distribution of body temperatures that organisms experience in nature?
+To this point, we have explored how TPC breadth and within-season body temperature variation influence the benefit of plasticity. We now add variation in the degree of temporal (e.g., seasonal) mean body temperature change. 
 
-## Additional methods
+In general, the benefit of plasticity increases with seasonal body temperature change (Figure 5). This is consistent with the expectation that plasticity should be favored when there is greater temporal change in environmental temperature. However, when within-season body temperature variation is low ($\sigma_{T_b}$ = 2 °C), the narrow TPC organism eventually experiences decreasing plasticity benefits with increasing seasonal temperature change (orange line in Figure 5, left). This occurs because temperature change becomes too large relative to TPC breadth, even with plastic compensation. Additionally, the relative benefit of plasticity depends on a three-way interaction between TPC breadth, within-season body temperature variation, and the magnitude of seasonal body temperature change. When within-season body temperature variation is relatively low (Figure 5, left) and the magnitude of seasonal body temperature change is relatively small (< 6 °C), the narrow TPC organism gains more fitness benefit from plasticity than the intermediate and wide-breadth organisms. However, as within-season body temperature variation increases (Figure 5 center, right), this changes. Indeed, at our highest level of within-season body temperature variation, the narrow TPC organism had the lowest benefit of plasticity across all magnitudes of seasonal temperature change (Figure 5, right). Finally, regardless of within-season body temperature variation, the narrow TPC organism received less benefit of plasticity than the intermediate and wide TPC organisms at the highest magnitudes of seasonal body temperature change (> ~ 8 °C; Figure 5).
 
-An overview of the methods is below:
+```{r figure-5}
+#| fig-width: 7.5
+#| fig-height: 4
+#| fig-cap: |
+#|  **Figure 5**: The net fitness benefit of plasticity depends on a three-way interaction between constitutively expressed thermal performance curve (TPC) breadth, the magnitude of temporal (i.e., seasonal) body temperature change, and within-season body temperature variation (σTb). 
 
-#### **Thermal performance curves**
+tpc_params <- tibble(
+  tpc_breadth = c("w_15", "w_30", "w_45"),
+  ctmin = c(20, 5, -5),
+  ctmax = c(35, 40, 45)
+)
+arr <- 0.3
+delta_temps <- seq(0, 10, by = 0.25)
+sd_tb <- c(2, 5, 10)
+topt <- 30
+
+# calculate fitness benefit combinations
+combinations <- expand_grid(
+  tpc_params, delta_temp = delta_temps, sd_tb = sd_tb 
+) |>
+  rowwise() |>
+  mutate(
+    mean_tb = topt - otsm(
+      ctmin = ctmin, topt = topt, ctmax = ctmax, sd_tb = sd_tb
+    ),
+    fitness_no_plasticity = exp_w(
+      ctmin = ctmin,
+      topt = topt,
+      ctmax = ctmax,
+      sd_tb = sd_tb,
+      mean_tb = mean_tb + delta_temp
+    ),
+    fitness_with_plasticity = exp_w(
+      ctmin = ctmin + arr * delta_temp,
+      topt = topt + arr * delta_temp,
+      ctmax = ctmax + arr * delta_temp,
+      sd_tb = sd_tb, 
+      mean_tb = mean_tb + delta_temp
+    ),
+    benefit = fitness_with_plasticity - fitness_no_plasticity
+  )
+
+ggplot(
+  data = combinations,
+  aes(
+    x = delta_temp,
+    y = benefit,
+    color = as.factor(tpc_breadth))
+  ) +
+  geom_line(linewidth = 1.25) +
+  scale_color_manual(
+    values = c("#E69F00", "#56B4E9", "#36648B"),
+    labels = c("15 °C", "30 °C", "45 °C"),
+    name = expression("TPC breadth (" * degree * "C)")
+  ) +
+  scale_x_continuous(
+    expand = c(0, 0), limits = c(0, 10)
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = c(0.9, 0.77),
+    panel.border = element_rect(fill = NA, color = "black", linewidth = 0.5),
+    axis.ticks = element_line(linewidth = 0.5),
+    panel.grid.major = element_line(linewidth = 0.05, color = "lightgray"),
+    panel.grid.minor = element_blank(),
+    strip.text = element_text(size = 14, face = "bold"),
+    legend.title = element_text(size = 12, face = "bold", hjust = 1),
+    legend.text = element_text(size = 12, hjust = 1),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 10)
+  ) +
+  labs(
+    x = expression("Change in mean body temperature (" * degree * "C)"),
+    y = "Benefit of plasticity\n(change in expected fitness)",
+    color = expression("TPC breadth (" * degree * "C)")
+  ) +
+  facet_grid(~sd_tb, labeller = labeller(sd_tb = as_labeller(c(
+    "2" = "sigma[T[b]] == 2",
+    "5" = "sigma[T[b]] == 5",
+    "10" = "sigma[T[b]] == 10"
+  ), label_parsed)),
+  axes = "all")
+```
+
+## Putting it all together
+
+There are three general takeaways from our analyses. First, the benefits of thermal plasticity for ectotherms depend on constitutively expressed thermal tolerance breadth. There are conditions in which narrow TPC organisms benefit most from plasticity and conditions in which broad TPC organisms benefit most (Figures 1-5). Second, within-season body temperature variation plays a crucial role in determining the benefit of plasticity. Experiencing greater within-season body temperature variation always decreases the benefits of plasticity, but the magnitude of this effect depends on constitutive TPC breadth: organisms with narrow TPCs experience greater decreases in plasticity benefits as within-season body temperature variation increases (Figures 3, 4). Third, the magnitude of seasonal change in body temperature matters, but in a complex way that is dependent on both constitutive TPC breadth and within-season variation in body temperature. In most cases, the benefits of plasticity rise as mean seasonal body temperature change increases (Figure 5). However, the combination of low within-season body temperature variation and small changes in mean body temperature across seasons causes narrow TPC organisms to receive comparatively greater benefits of plasticity (e.g., Figure 5, left). In contrast, high within-season body temperature variation and large seasonal shifts in mean body temperature tend to yield comparatively greater plasticity benefits for wide TPC organisms (Figure 5). 
+
+Our results do not refute that the temporal temperature variation on which the CVPH rests is an important factor for the evolution of thermal plasticity (Figure 5). However, we show that temporal temperature variation cannot be considered in isolation. Constitutive TPC breadth is important, and we know that empirical TPC breadth varies predictably across climatic gradients. Ectotherms inhabiting habitats with greater temperature seasonality tend to have wider thermal tolerance breadths (e.g., Sunday et al. 2010; Sheldon and Tewksbury 2014; Gutiérrez‐Pesquera et al. 2016; Baudier et al. 2019), which may depress the benefits of plasticity by facilitating high performance across a wide range of temperatures. Within-season body temperature variation is also crucial, but is not as well understood as TPC breadth due to the difficulty of measuring field body temperatures for many organisms. That said, variation in within-season environmental temperature does change across geographic gradients. For example, within a season, high-latitude terrestrial organisms tend to experience greater variation in daily maximum air temperature than low-latitude organisms (Gunderson et al. 2017; Kingsolver and Buckley 2017). If this pattern translates to body temperatures, within-season temperature variation would reduce the benefits of TPC plasticity more for high-latitude organisms.  
+ 
+Our models indicate that key features of real organisms (constitutive tolerance breadth and body temperature variation) could contribute to a lack of support for the CVPH, and even produce patterns opposite to those predicted by the CVPH (Seebacher et al. 2015; Ruthsatz et al. 2024). Most tropical organisms live in environments with little temperature seasonality, but they are also likely to have narrow TPCs and experience relatively invariant body temperature distributions, features that combine to favor the evolution of thermal plasticity. Conversely, high-latitude species often live in environments with extensive seasonal temperature change, but they also tend to have broad TPCs and relatively variable body temperatures, characteristics that would limit the benefits of plasticity. 
+
+## Conclusions & Future Directions
+
+Our results highlight areas that require greater attention to resolve outstanding questions about the evolution of thermal plasticity. First, we show that integrating information about constitutive TPC breadth would be beneficial. This likely extends to other features of TPCs that affect sensitivity, such as skewness (Buckley et al. 2022; Martin & Huey, 2008). Second, within-season body temperature variation requires much greater empirical attention with respect to the evolution of thermal plasticity. Furthermore, there may be important interactions between processes that change body temperature distributions, such as behavioral thermoregulation (Hertz et al. 1993, Logan et al., 2019; Muñoz, 2022), and the evolution of plasticity. Ultimately, our results endorse taking a more holistic view of temperature-dependent physiology and environmental temperature dynamics to deepen our understanding of how thermal plasticity evolves.
+
+## Additional Methods
+
+### Thermal Performance Curves (TPCs)
 
 Across all analysis, we define the relationship between body temperature (T) and fitness (W) with the equation for a thermal performance curve (TPC) developed by Deutsch et al. (2008):
 
@@ -794,29 +865,31 @@ $$
 Where T<sub>opt</sub> is the optimal temperature, CT<sub>min</sub> is the critical thermal minimum, and CT<sub>max</sub> is the critical thermal maximum. We chose this equation because its parameters are thermal physiological traits commonly measured empirically and thus easily interpretable, and because there is no clear TPC equationthat is better than any other (Kontopoulos et al. 2024). As Deutsch et al. (2008) indicate, due to the exponential nature of the ascpenting part of this TPC equation (when T \< T<sub>opt</sub>), CT<sub>min</sub> does not coresspond exactly to W = 0, but to W \~ 0.001, although this should have minimal impact on our results. In all cases, we also assumed that T<sub>opt</sub> would be arbitrarily set at 30°C and that the asummetry of the TPC would be set to 2/3 such that T<sub>opt</sub> - CT<sub>min</sub> = 2 \* (CT<sub>max</sub> - T<sub>opt</sub>).
 
 ```{r show-tpc-function}
-#| filename: "Implementation of the TPC function in R"
 #| code-fold: false
+#| filename: "Implementation of the TPC function in R"
+
 tpc <- function(temps, topt, ctmin, ctmax) {
 
-  # initialize fitness vector
-  w <- rep(NA, length(temps))
+  # initialize performance vector and define psig
+  perf <- rep(NA, length(temps))
+  psig <- -((ctmin - topt) / 4)
 
-  # calculate fitness values for each temperature
+  # calculate performance
   for (i in seq_along(temps)){
     if (temps[i] < topt) {
-      w[i] <- exp(-((temps[i] - topt) / (2 * -((ctmin - topt) / 4)))^2)
+      perf[i] <- exp(-((temps[i] - topt) / (2 * psig))^2)
     } else {
-      w[i] <- 1 - ((temps[i] - topt) / (topt - ctmax))^2
+      perf[i] <- 1 - ((temps[i] - topt) / (topt - ctmax))^2
     }
   }
 
   # correct for negative values and return
-  ifelse(w < 0, 0, w)
+  ifelse(perf < 0, 0, perf)
 
 }
 ```
 
-#### **Expected fitness calculation**
+### Expected fitness calculation
 
 To calculate the expected fitness (E\[W\]) of a TPC under a given body temperature distribution, we used the method developed by Vasseur et al. (2014), which involves integrating the product of the TPC and the probability density function of the body temperature distribution across all possible body temperatures using th expression:
 
@@ -829,307 +902,90 @@ Where W(T) is the TPC function, PDF(N(T<sub>m</sub>, T<sub>sd</sub>), T) is the 
 ```{r show-expected-fitness-function}
 #| code-fold: false
 #| filename: "Implementation of the expected fitness function in R"
-exp_w <- function(topt, ctmin, ctmax, mean_tb, sd_tb) {
 
-  # stop if sd_tb is negative
-  if (sd_tb < 0) {
-    stop("Standard deviation of body temperature cannot be negative.")
-  }
-  
-  # if sd_tb is exactly 0, return the TPC value at mean_tb
+exp_w <- function(topt, ctmin, ctmax, mean_tb, sd_tb) {
+  if (sd_tb < 0) stop("sd_tb cannot be negative")
   if (sd_tb == 0) {
     tpc(mean_tb, topt, ctmin, ctmax)
-
-  # if sd_tb > 0 integrate the product of the TPC and the normal distribution
   } else {
-
-    # function to calculate integrand
-    integrand <- function(temps) {
-      tpc(temps, topt, ctmin, ctmax) * dnorm(temps, mean = mean_tb, sd = sd_tb)
-    }
-
-    # integrate
-    integrate(integrand, lower = -30, upper = 60)$value
+    integrate(
+      \(t) tpc(t, topt, ctmin, ctmax) * dnorm(t, mean = mean_tb, sd = sd_tb),
+      lower = -30, upper = 60
+    )$value
   }
 }
 ```
 
-#### **Optimal thermal safety margins**
+
+### Optimal thermal safety margin (OTSM) calculation
 
 To calculate the optimal thermal safety margin (OTSM) for a given TPC and body temperature distribution, we used a numerical optimization approach. We defined the OTSM as the difference between T<sub>opt</sub> and the mean body temperature (T<sub>m</sub>) that maximizes expected fitness given the variability in body temperature (T<sub>sd</sub>). Thus, to calculate OTSM, we needed to find the value of T<sub>m</sub> that maximizes expected fitness for a given TPC and T<sub>sd</sub>. To accomplish this, we defined a function that calculates expected fitness for a given T<sub>m</sub> and T<sub>sd</sub> using the expected fitness function described above. We then used the `optimize` function in R to find the value of T<sub>m</sub> that maximizes expected fitness, which corresponds to the optimal thermal safety margin (the difference between T<sub>opt</sub> and T<sub>m</sub>).
 
 ```{r show-otsm-function}
 #| code-fold: false
-#| filename: "Function to calculate optimal thermal safety margin in R"
-otsm <- function(ctmin, topt, ctmax, sd_tb, sk_tb = 1) {
+#| filename: "Function to estimate optimal thermal safety margin (OTSM) for a given TPC and body temperature distribution in R"
 
-  if (sd_tb == 0) {
-    0
-  } else {
-    # function to calculate expected fitness for a given mean body temperature
-    exp_w_mean_tb <- function(mean_tb) {
-      exp_w(ctmin = ctmin, topt = topt, ctmax = ctmax,
-            sd_tb = sd_tb, mean_tb = mean_tb)
-    }
-
-    # optimize to find mean body temperature that maximizes expected fitness
-    opt_result <- optimize(exp_w_mean_tb, lower = ctmin, upper = ctmax, maximum = TRUE)
-
-    # return optimal thermal safety margin
-    topt - opt_result$maximum
+otsm <- function(ctmin, topt, ctmax, sd_tb) {
+  if (sd_tb == 0) 0 else {
+    topt - optimize(
+      \(mean_tb) exp_w(ctmin = ctmin, topt = topt, ctmax = ctmax, # nolint
+                       sd_tb = sd_tb, mean_tb = mean_tb),
+      lower = ctmin, upper = ctmax, maximum = TRUE
+    )$maximum
   }
 }
 ```
 
-#### **Benefits of plasticity**
+## Supplementary Figures
 
-We estimated the benefits of plasticity as the relative change in expected fitness with plasticity compared to without plasticity, calculated as:
+```{r plot-supp-figure-1}
+#| fig-width: 4
+#| fig-height: 4
+#| out-width: "75%"
+#| fig.cap: |
+#|  **Supplementary Figure 1**: Optimal thermal safety margin (OTSM, expressed as below a TPC’s T<sub>opt</sub>) of TPCs with varying constitutive thermal performance breadths (colored lines) as a function of the standard deviation of the body temperature distribution they experience. Note that, in all cases, OTSM increases with increasing variability in body temperature, but only up to a point where it plateaus. The value at which this stabilization occurs is greater for wider than narrower TPCs (B), and in all cases this stabilization occurs at body temperatures that are well above a TPC’s CT<sub>min</sub>.
 
-$$
-\Delta W = \frac{E(W)' - E(W)}{E(W)^0}
-$$
-
-Where E(W)' is the expected fitness with plasticity, E(W) is the expected fitness without plasticity, and E(W)<sup>0</sup> is the expected fitness under original conditions (i.e., before experiencing any change in mean body temperature). This metric allows us to compare the benefits of plasticity across different TPCs and levels of body temperature variability on a relative scale. For Figure 4, we calculated $\Delta W$ for all combinations of TPC breadth between 10 and 40°C at 0.25 intervals, change in mean body temperature between -10 and 10°C at 0.25 intervals, at 0, 2 and 5°C in body temperature variability (T<sub>sd</sub>) and ARR of 0.1, 0.3 and 0.5.
-
-#### **Risk of thermal injury**
-
-To estimate the risk of thermal injury, we calculated the probability of experiencing a body temperature above CT<sub>max</sub> or below CT<sub>min</sub> given the mean body temperature and variability in body temperature. We did this by calculating the sum of cummulative probabilities in the lower and upper tails of the body temperature distribution using the expression:
-
-$$
-P_{injury} = \int_{-\infty}^{CT_{min}} PDF(N(T_m, T_{sd}), T) \,dT + \int_{CT_{max}}^{\infty} PDF(N(T_m, T_{sd}), T) \,dT
-$$
-
-Where PDF(N(T<sub>m</sub>, T<sub>sd</sub>), T) is the probability density function of a normal distribution with mean T<sub>m</sub> and standard deviation T<sub>sd</sub>. We calculated this probability for both the original conditions (without plasticity) and after experiencing a change in mean body temperature with plasticity, and then calculated the change in risk of thermal injury as the difference between these two probabilities.
-
-```{r show-ptinj-function}
-#| code-fold: false
-#| filename: "Function to calculate probability of thermal injury in R"
-ptinj <- function(ctmin, topt, ctmax, mean_tb, sd_tb) {
-
-  # stop if sd_tb is negative
-  if (sd_tb < 0) {
-    stop("Standard deviation of body temperature cannot be negative.")
-  }
-
-  # if there is no variation in tb
-  if (sd_tb == 0) {
-    if (mean_tb < ctmin || mean_tb > ctmax) {
-      1
-    } else {
-      0
-    }
-  
-  # if there is variation in tb
-  } else {
-
-    # calculate ptinj at upper and lower tails of the distribution
-    ptinj_lower <- pnorm(ctmin, mean = mean_tb, sd = sd_tb)
-    ptinj_upper <- 1 - pnorm(ctmax, mean = mean_tb, sd = sd_tb)
-
-    # return sum of both tails
-    ptinj_lower + ptinj_upper
-
-  }
-}
-
-```
-
-#### **Software and code availability**
-
-Click [here](https://ggcostoya.github.io/plasticity_benefits/index-preview.html) to view an interactive version of this manuscript with all code. 
-
-The example above assumes that organisms experience a single body temperature, whereas in reality, they experience a distribution of body temperatures. A key evolutionary consequence of this variability is a shift in T<sub>opt</sub> towards a value greater than the mean body temperature experienced (i.e., T<sub>m</sub>). This shift occurs because, counterintuitively, the expected fitness of a TPC when T<sub>m</sub> = T<sub>opt</sub> is less than when T<sub>m</sub> < T<sub>opt</sub> (Figure 3A). As a consequence of experiencing variable body temperatures, organisms experience some body temperatures that exceed T<sub>opt</sub>, which have a disproportionate negative effect on expected fitness due to the asymmetry of the TPC, a pattern explained by Jensen’s inequality, a mathematical property of non-linear functions such as TPCs (Ruel & Ayres, 1999). As a result, natural selection will favor organisms that develop a thermal safety margin, or a TPC with T<sub>opt</sub> > T<sub>m</sub> . A key question, however, is which thermal safety margin maximizes fitness for a given TPC shape and body temperature regime? Past studies have concluded that the optimal thermal safety margin (OTSM) increases with the asymmetry of a TPC (Martin & Huey, 2008). However, less is known about how OTSM changes with increasing variability in body temperatures and the constitutive breadth of the TPC. By calculating the OTSM of TPCs with different breadths under body temperature distributions with varying levels of variability, we find that the OTSM increases with variability but only up to an extent, after which it plateaus, regardless of TPC breadth, but that the value at which it plateaus is greater for wider than for narrower TPCs (Figure 3B).
-
-```{r plot-otsm}
-#| fig.width: 8
-#| fig.height: 4
-#| fig.align: "center"
-#| fig.cap: "**Figure 3**. When experiencing a distribution of body temperatures, the expected fitness of an organism is smaller when the mean body temperature it experiences (T<sub>m</sub>) is equal to its T<sub>opt</sub> of its TPC (light-gray distribution), compared to when T<sub>m</sub> < T<sub>opt</sub> (dark-gray distribution; A). The optimal thermal safety margin (OTSM, the difference between T<sub>opt</sub> and T<sub>m</sub>) increases with increasing levels of variability in body temperature, but only up to a point at which it plateaus. The value at which this stabilization occurs is greater for wider than narrower TPCs (B). " # nolint
-
-# define expected fitness function using Vasseur method
-exp_w <- function(topt, ctmin, ctmax, mean_tb, sd_tb) {
-
-  if (sd_tb == 0) {
-    tpc(mean_tb, topt, ctmin, ctmax)
-
-  } else {
-    # function to calculate integrand
-    integrand <- function(temps) {
-      tpc(temps, topt, ctmin, ctmax) * dnorm(temps, mean = mean_tb, sd = sd_tb)
-    }
-
-    # integrate
-    integrate(integrand, lower = -30, upper = 60)$value
-  }
-}
-
-# define optimal thermal safety margin function
-otsm <- function(ctmin, topt, ctmax, sd_tb, sk_tb = 1) {
-
-  if (sd_tb == 0) {
-    0
-  } else {
-    # function to calculate expected fitness for a given mean body temperature
-    exp_w_mean_tb <- function(mean_tb) {
-      exp_w(ctmin = ctmin, topt = topt, ctmax = ctmax,
-            sd_tb = sd_tb, mean_tb = mean_tb)
-    }
-
-    # optimize to find mean body temperature that maximizes expected fitness
-    opt_result <- optimize(exp_w_mean_tb, lower = ctmin, upper = ctmax, maximum = TRUE)
-
-    # return optimal thermal safety margin
-    topt - opt_result$maximum
-  }
-}
-
-# define TPC parameters
-topt <- 30
-ctmin <- 5
-ctmax <- 35
-sd_tb <- 2
-mean_tb <- 30
-
-# calculate otsm
-otsm_tb <- otsm(ctmin, topt, ctmax, sd_tb)
-mean_tb_otsm <- mean_tb - otsm_tb
-
-# generate a TPC data frame
-tpc_df <- tibble(
-  tb = seq(0, 50, by = 0.1),
-  performance = tpc(seq(0, 50, by = 0.1), topt, ctmin, ctmax)
+tpc_params <- tibble(
+  tpc_breadth = c("w_15", "w_30", "w_45"),
+  ctmin = c(20, 5, -5),
+  ctmax = c(35, 40, 45)
 )
 
-# generate tb distribution for plotting
-tb_dist_no_otsm <- data.frame(
-  tb = seq(0, 50, by = 0.1),
-  probability = dnorm(seq(0, 50, by = 0.1), mean = topt, sd = sd_tb)
-)
-tb_dist_otsm <- data.frame(
-  tb = seq(0, 50, by = 0.1),
-  probability = dnorm(seq(0, 50, by = 0.1), mean = mean_tb_otsm, sd = sd_tb)
-)
-tb_dist_df <- bind_rows(
-  tb_dist_no_otsm |> mutate(otsm = "No OTSM"),
-  tb_dist_otsm |> mutate(otsm = "With OTSM")
-)
-
-# create a data frame for expected fitness for plot
-exp_fitness_df <- tibble(
-  otsm = c("No OTSM", "With OTSM"),
-  expected_fitness = c(
-    exp_w(topt, ctmin, ctmax, mean_tb, sd_tb),
-    exp_w(topt, ctmin, ctmax, mean_tb_otsm, sd_tb)
-  ),
-  mean_tb = c(mean_tb, mean_tb_otsm)
-)
-
-# generate expected fitness distributions
-exp_fitness_dist_df <- tibble(
-  exp_fitness_no_otsm = tpc(
-    rnorm(1000, mean = mean_tb, sd = sd_tb), topt, ctmin, ctmax
-  ),
-  exp_fitness_with_otsm = tpc(
-    rnorm(1000, mean = mean_tb_otsm, sd = sd_tb), topt, ctmin, ctmax
-  )
+otsm_grid <- expand_grid(
+  tpc_params, sd_tb = seq(0.5, 20, by = 0.1)
 ) |>
-  pivot_longer(
-    cols = everything(),
-    names_to = "otsm",
-    values_to = "expected_fitness"
-  ) |>
-  mutate(otsm = recode(otsm,
-                       exp_fitness_no_otsm = "No OTSM",
-                       exp_fitness_with_otsm = "With OTSM"))
-
-# plot panel A
-panela <- ggplot() +
-  geom_line(
-    data = tpc_df,
-    aes(x = tb, y = performance), linewidth = 1.25
-  ) +
-  geom_area(
-    data = tb_dist_df,
-    aes(x = tb, y = probability, fill = otsm, color = otsm), alpha = 0.25,
-    position = "identity"
-  ) +
-  geom_vline(
-    xintercept = c(mean_tb, mean_tb_otsm),
-    color = c("darkgray", "black"), linetype = "dashed"
-  ) +
-  geom_density(
-    data = exp_fitness_dist_df,
-    aes(y = expected_fitness, fill = otsm, color = otsm),
-    alpha = 0.25,
-    position = "identity"
-  ) +
-  geom_segment(
-    data = exp_fitness_df,
-    aes(
-      x = -Inf, xend = mean_tb,
-      y = expected_fitness, yend = expected_fitness, color = otsm
-    ),
-    linetype = "dashed"
-  ) +
-  scale_color_manual(values = c("gray", "black")) +
-  scale_fill_manual(values = c("gray", "black")) +
-  scale_x_continuous(expand = c(0, 0)) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, 1.001)) +
-  theme_classic() +
-  theme(
-    legend.position = "none"
-  ) +
-  labs(
-    x = expression("Body temperature (" * degree * "C)"),
-    y = "Fitness (W)"
-  ) +
-  coord_cartesian(xlim = c(0, 40))
-
-# generate holder data frame to store otsm
-sd_tb <- seq(0.5, 10, by = 0.25)
-tpc_breadth <- seq(10, 40, by = 5)
-otsm_df <- expand.grid(
-  sd_tb = sd_tb, tpc_breadth = tpc_breadth
-) |>
-  as_tibble() |>
-  mutate(otsm = NA_real_) |>
-  arrange(tpc_breadth, sd_tb)
-
-# loop to estimate OTMs across TPC breadths and tb variability
-for (i in seq_len(nrow(otsm_df))) {
-  otsm_df$otsm[i] <- otsm(
-    ctmin = topt - otsm_df$tpc_breadth[i] * (2 / 3),
-    topt = topt,
-    ctmax = topt + otsm_df$tpc_breadth[i] * (1 / 3),
-    sd_tb = otsm_df$sd_tb[i]
+  rowwise() |>
+  mutate(
+    otsm = otsm(ctmin = ctmin, topt = 30, ctmax = ctmax, sd_tb = sd_tb)
   )
-}
 
-# sort otsm_df for plotting
-otsm_df <- otsm_df |> arrange(tpc_breadth, sd_tb, otsm)
-
-# plot panel B
-panelb <- otsm_df |>
-  ggplot(aes(y = sd_tb, x = -otsm, color = tpc_breadth)) +
-  geom_vline(xintercept = 0, linetype = "dashed", color = "gray") +
+otsm_grid |>
+  ggplot(aes(x = sd_tb, y = otsm, color = as.factor(tpc_breadth))) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "gray") +
   geom_path(aes(group = tpc_breadth), linewidth = 1.5, alpha = 0.75) +
-  scale_color_viridis() +
-  theme_classic() +
+  scale_color_manual(
+    values = c("#E69F00", "#56B4E9", "#36648B"),
+    labels = c("15 °C", "30 °C", "45 °C"),
+    name = expression("TPC breadth (" * degree * "C)")
+  ) +
+  scale_x_continuous(
+    expand = c(0, 0), limits = c(0, 20)
+  ) +
+  theme_minimal() +
   theme(
-    legend.position = c(0.25, 0.25)
+    legend.position = c(0.25, 0.85),
+    axis.line = element_line(linewidth = 0.75),
+    axis.ticks = element_line(linewidth = 0.5),
+    panel.grid.major = element_line(linewidth = 0.05, color = "lightgray"),
+    panel.grid.minor = element_blank(),
+    strip.text = element_text(size = 14, face = "bold"),
+    legend.title = element_text(size = 12, face = "bold", hjust = 0),
+    legend.text = element_text(size = 12, hjust = 0)
   ) +
   labs(
-    y = expression("Standard deviation of body temperature (" * degree * "C)"),
-    x = expression("Optimal thermal safety margin (" * degree * "C below T"[opt]*")"), # nolint
-    color = expression("TPC Breadth (" * degree * "C)")
+    x = expression("Standard deviation of body temperature (" * degree * "C)"),
+    y = expression("Optimal thermal safety margin (" * degree * "C below T"[opt]*" )"), # nolint
+    color = expression(T[br])
   )
 
-# combine panels
-ggarrange(panela, panelb, nrow = 1, ncol = 2, labels = c("A", "B"))
 ```
-
-
-## References
-
-::: {#refs}
-:::
