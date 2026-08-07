@@ -17,7 +17,7 @@ knitr:
     dpi: 300
 
 execute:
-  freeze: auto
+  freeze: true
 
 
 
