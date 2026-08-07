@@ -38,9 +38,6 @@ format:
 library(tidyverse)
 library(ggpubr)
 library(viridis)
-library(ggnewscale)
-library(showtext)
-library(ggtext)
 ```
 
 ## Introduction
@@ -67,7 +64,7 @@ Second, despite achieving the highest net benefit of plasticity, the narrow TPC 
 #| fig-width: 9
 #| fig-height: 7
 #| fig-cap: |
-#|  **Figure 1**: Phenotypic plasticity can provide greater net fitness benefits for narrow than for broad thermal performance curves (TPCs). Shown are three organisms with TPCs that vary in their constitutive thermal breadth (T<sub>br</sub>): narrow (T<sub>br</sub> = 15 °C), left panel, intermediate (T<sub>br</sub> = 30 °C, middle panel), and wide (T<sub>br</sub> = 45 °C, right panel). The organisms have evolved to maximize fitness (W = 1) at the constant body temperature they experience, which in this case we set arbitrarily to 30 °C (T<sub>opt</sub>, gray vertical line). Following a 3 °C increase in body temperature (orange vertical line and arrow), absolute fitness declines across all organisms in the absence of plasticity (projected onto the y-axis via the gray vs. black horizontal lines), with the narrowest TPC experiencing the most severe decline in fitness. If all three organisms shift their TPC in response to warming through phenotypic plasticity by the same amount (here assuming an Acclimation Response Ratio (ARR) of 0.30), the net fitness benefit conferred by plasticity (the vertical distance between the red and black horizontal lines) is highest for the organism with the narrowest TPC and lowest in the organism with the widest TPC.
+#|  **Figure 1**: Phenotypic plasticity can provide greater net fitness benefits for narrow than for broad thermal performance curves (TPCs). Panel A shows three organisms with TPCs that vary in their constitutive thermal breadth (T<sub>br</sub>): narrow (T<sub>br</sub> = 15 °C), left panel, intermediate (T<sub>br</sub> = 30 °C, middle panel), and wide (T<sub>br</sub> = 45 °C, right panel). The organisms have evolved to maximize fitness (W = 1) at the constant body temperature they experience, which in this case we set arbitrarily to 30 °C (T<sub>opt</sub>, gray vertical line). Following a 3 °C increase in body temperature (orange vertical line), absolute fitness declines across all organisms in the absence of plasticity (projected onto the y-axis via the gray vs. black horizontal lines), with the narrowest TPC experiencing the most severe decline in fitness. If all three organisms shift their TPC in response to warming through phenotypic plasticity by the same amount (here assuming an Acclimation Response Ratio (ARR) of 0.30), the net fitness benefit conferred by plasticity (the vertical distance between the red and black horizontal lines, indicated by the red arrows) is highest for the organism with the narrowest TPC and lowest in the organism with the widest TPC. Panel B shows how the benefit of plasticity declines exponentially with increasing TPC breadth, with the three dots indicating the three TPC breadths shown in panel A.
 
 # define TPC function
 tpc <- function(temps, topt, ctmin, ctmax) {
@@ -367,17 +364,17 @@ ggplot(arr_df, aes(x = arr, y = fitness, color = tpc_breadth)) +
 
 ## Incorporating within-season variability in body temperature
 
-We now build on the model by adding variation around the mean body temperature experienced at each time point, represented by the standard deviation of body temperature, $\sigma_{T_b}$ (Figure 4). This can be thought of as, for example, variation in body temperature experienced within a season, and thus we refer to it as “within-season body temperature variation.” As before, we assume that these organisms have evolved to maximize initial fitness, which results in each taxon having a different initial mean body temperature (Figure 3A). This is because TPCs are asymmetrical, which causes fitness to be maximized when mean $T_b < T_{opt}$ in the presence of thermal variability (i.e., Jensen’s inequality; Denny 2017, Martin and Huey 2008, Ruel & Ayres 1999). Within-season body temperature variation also reduces the maximum expected fitness that organisms can achieve (see also Vasseur et al 2014), and the effect is greatest for organisms with narrow TPCs (Figure 3).
+We now build on the model by adding variation around the mean body temperature experienced at each time point, represented by the standard deviation of body temperature, $\sigma_{T_b}$ (Figure 4). This can be thought of as, for example, variation in body temperature experienced within a season, and thus we refer to it as “within-season body temperature variation.” As before, we assume that these organisms have evolved to maximize initial fitness, which results in each taxon having a different initial mean body temperature (Figure 3A). This is because TPCs are asymmetrical, which causes fitness to be maximized when mean T<sub>b</sub> < T<sub>opt</sub> in the presence of thermal variability (i.e., Jensen’s inequality; Denny 2017, Martin and Huey 2008, Ruel & Ayres 1999). Within-season body temperature variation also reduces the maximum expected fitness that organisms can achieve (see also Vasseur et al 2014), and the effect is greatest for organisms with narrow TPCs (Figure 3).
 
 If we again assume an increase in mean body temperature of 3 °C, several patterns of note emerge. First, the benefit of plasticity decreases as within-season body temperature variation increases for all organisms (Figure 3). This is consistent with previous theoretical treatments with symmetrical tolerance curves (Gabriel and Lynch 1992), and means that, for two organisms with the same thermal tolerance breadth, the one with a more stable within-season body temperature distribution will benefit most from thermal plasticity. 
 
-Second, the extent to which within-season body temperature variation reduces the benefits of plasticity is dependent on TPC breadth. As within-season body temperature variation increases, the narrow TPC organism experiences the largest decrease in the benefit of plasticity, while the wide TPC organism is affected the least (compare points within a given TPC breadth in Figure 3B). In addition, within-season body temperature variation changes who benefits the most from plasticity. When $\sigma_{T_b} = 0, 2, or 5$ °C (the purple, blue, and green lines in Figure 3B, respectively), the narrow TPC organism gains more from plasticity than the wide TPC organism. However, when $\sigma_{T_b} = 10$ °C, the narrow TPC organism benefits least, and the wide TPC organism benefits most (yellow line in Figure 3B).
+Second, the extent to which within-season body temperature variation reduces the benefits of plasticity is dependent on TPC breadth. As within-season body temperature variation increases, the narrow TPC organism experiences the largest decrease in the benefit of plasticity, while the wide TPC organism is affected the least (compare points within a given TPC breadth in Figure 3B). In addition, within-season body temperature variation changes who benefits the most from plasticity. When $\sigma_{T_b}$ = 0, 2, or 5 °C (the purple, blue, and green lines in Figure 3B, respectively), the narrow TPC organism gains more from plasticity than the wide TPC organism. However, when $\sigma_{T_b} = 10$ °C, the narrow TPC organism benefits least, and the wide TPC organism benefits most (yellow line in Figure 3B).
 
 ```{r plot-figure-3}
 #| fig-width: 8
 #| fig-height: 8
 #| fig.cap: |
-#|  **Figure 3**: Examples of the effect of constitutive thermal breadth and within-season body temperature variation on the benefits of plasticity. (A) Thermal performance curve (TPC) breadth and within-season variation in the distribution of body temperatures, represented by the standard deviation (σTb), interact to determine plasticity benefits. Note that under variable within-season body temperatures, initial fitness (gray horizontal lines) is not 1 due to Jensen’s inequality (see text). After a 3 °C increase in mean body temperature (gray vs orange vertical lines and areas), the organisms shift their TPCs with an acclimation response ratio (ARR) of 0.30. The expected fitness benefit of plasticity (difference between the red and black horizontal lines) is greatest for the narrowest TPC, but for all TPCs, it decreases when body temperatures are more variable. (B) The expected benefit of plasticity as a function of both TPC breadth and within-season body temperature variation, with σTb set to 0 as in Figure 1, as well as 2, 5, or 10 °C. 
+#|  **Figure 3**: Examples of the effect of constitutive thermal breadth and within-season body temperature variation on the benefits of plasticity. (A) Thermal performance curve (TPC) breadth and within-season variation in the distribution of body temperatures, represented by the standard deviation ($\sigma_{T_b}$), interact to determine plasticity benefits. Note that under variable within-season body temperatures, initial fitness (gray horizontal lines) is not 1 due to Jensen’s inequality (see text). After a 3 °C increase in mean body temperature (gray vs orange vertical lines and areas), the organisms shift their TPCs with an acclimation response ratio (ARR) of 0.30. The expected fitness benefit of plasticity (difference between the red and black horizontal lines) is greatest for the narrowest TPC, but for all TPCs, it decreases when body temperatures are more variable. (B) The expected benefit of plasticity as a function of both TPC breadth and within-season body temperature variation, with $\sigma_{T_b}$ set to 0 as in Figure 1, as well as 2, 5, or 10 °C. Dots in this panel indicate TPCs with T<sub>br</sub> = 15, 30, and 45 °C, as shown in panel A. 
 
 # define expected fitness function
 exp_w <- function(topt, ctmin, ctmax, mean_tb, sd_tb) {
@@ -610,7 +607,7 @@ panel_a <- ggplot() +
     strip.background = element_blank(),
     legend.position = "top",
     legend.title = element_blank(),
-    legend.text = element_text(size = 11, margin = margin(r = 6, l = 1)),
+    legend.text = element_text(size = 12, margin = margin(r = 6, l = 1)),
     legend.margin = margin(l = 0.01, r = 0.01),
     legend.spacing.x = unit(0.1, "cm"),
     panel.border = element_rect(fill = NA, color = "black", linewidth = 0.5),
@@ -642,7 +639,8 @@ panel_b <- fitness_change_df |>
     axis.title = element_text(size = 14),
     legend.text = element_text(size = 14),
     legend.title = element_text(size = 16, face = "bold"),
-    legend.position = "right",
+    legend.position = c(0.9, 0.7),
+    legend.background = element_blank(),
     panel.grid = element_blank(),
     axis.ticks = element_line(linewidth = 0.5),
     axis.line = element_line(linewidth = 0.5),
@@ -657,7 +655,7 @@ panel_b <- fitness_change_df |>
 ggarrange(
   panel_a, panel_b,
   ncol = 1, nrow = 2,
-  heights = c(3, 1.5),
+  heights = c(3, 1.75),
   labels = c("A", "B"),
   font.label = list(size = 20, face = "bold"),
   label.x = c(0, 0.2),
@@ -670,9 +668,9 @@ Within-season body temperature variation also interacts with TPC breadth to affe
 
 ```{r plot-figure-4}
 #| fig-width: 7
-#| fig-height: 5
+#| fig-height: 4.5
 #| fig.cap: |
-#|  **Figure 4**: Effects of constitutively expressed thermal performance (TPC) breadth and within-season temperature variation (body temperature standard deviation, σTb) on the benefits of thermal plasticity across a range of plasticity levels (Acclimation Response Ratios, ARR). Results are based on a mean body temperature increase of 3 °C. Relatively stable within-season body temperatures (σTb = 2 °C, left panel) lead to greater benefits of plasticity than more variable within-season body temperatures (σTb = 5 or 10 °C, center and right panel, respectively) regardless of TPC breadth. In addition, when within-season body temperatures are more stable,  the benefit of evolving greater plasticity (i.e., higher ARR) is larger, and especially for narrow TPCs (compare steepness of the colored lines between σTb values and TPC breadths). 
+#|  **Figure 4**: Effects of constitutively expressed thermal performance (TPC) breadth (T<sub>br</sub>) and within-season temperature variation (body temperature standard deviation, $\sigma_{T_b}$) on the benefits of thermal plasticity across a range of plasticity levels (Acclimation Response Ratios, ARR). Results are based on a mean body temperature increase of 3 °C. Relatively stable within-season body temperatures ($\sigma_{T_b}$ = 2 °C, left panel) lead to greater benefits of plasticity than more variable within-season body temperatures ($\sigma_{T_b}$ = 5 or 10 °C, center and right panel, respectively) regardless of TPC breadth. In addition, when within-season body temperatures are more stable,  the benefit of evolving greater plasticity (i.e., higher ARR) is larger, and especially for narrow TPCs (compare steepness of the colored lines between $\sigma_{T_b}$ values and T<sub>br</sub>). 
 
 # define parameters
 arrs <- seq(0, 1, by = 0.01)
@@ -750,10 +748,10 @@ To this point, we have explored how TPC breadth and within-season body temperatu
 In general, the benefit of plasticity increases with seasonal body temperature change (Figure 5). This is consistent with the expectation that plasticity should be favored when there is greater temporal change in environmental temperature. However, when within-season body temperature variation is low ($\sigma_{T_b}$ = 2 °C), the narrow TPC organism eventually experiences decreasing plasticity benefits with increasing seasonal temperature change (orange line in Figure 5, left). This occurs because temperature change becomes too large relative to TPC breadth, even with plastic compensation. Additionally, the relative benefit of plasticity depends on a three-way interaction between TPC breadth, within-season body temperature variation, and the magnitude of seasonal body temperature change. When within-season body temperature variation is relatively low (Figure 5, left) and the magnitude of seasonal body temperature change is relatively small (< 6 °C), the narrow TPC organism gains more fitness benefit from plasticity than the intermediate and wide-breadth organisms. However, as within-season body temperature variation increases (Figure 5 center, right), this changes. Indeed, at our highest level of within-season body temperature variation, the narrow TPC organism had the lowest benefit of plasticity across all magnitudes of seasonal temperature change (Figure 5, right). Finally, regardless of within-season body temperature variation, the narrow TPC organism received less benefit of plasticity than the intermediate and wide TPC organisms at the highest magnitudes of seasonal body temperature change (> ~ 8 °C; Figure 5).
 
 ```{r figure-5}
-#| fig-width: 7.5
-#| fig-height: 4
+#| fig-width: 7
+#| fig-height: 4.5
 #| fig-cap: |
-#|  **Figure 5**: The net fitness benefit of plasticity depends on a three-way interaction between constitutively expressed thermal performance curve (TPC) breadth, the magnitude of temporal (i.e., seasonal) body temperature change, and within-season body temperature variation (σTb). 
+#|  **Figure 5**: The net fitness benefit of plasticity depends on a three-way interaction between constitutively expressed thermal performance curve (TPC) breadth (T<sub>br</sub>), the magnitude of temporal (i.e., seasonal) body temperature change, and within-season body temperature variation ($\sigma_{T_b}$).
 
 tpc_params <- tibble(
   tpc_breadth = c("w_15", "w_30", "w_45"),
@@ -802,23 +800,23 @@ ggplot(
   scale_color_manual(
     values = c("#E69F00", "#56B4E9", "#36648B"),
     labels = c("15 °C", "30 °C", "45 °C"),
-    name = expression("TPC breadth (" * degree * "C)")
+    name = expression("T"[br] *" ")
   ) +
   scale_x_continuous(
     expand = c(0, 0), limits = c(0, 10)
   ) +
   theme_minimal() +
   theme(
-    legend.position = c(0.9, 0.77),
-    panel.border = element_rect(fill = NA, color = "black", linewidth = 0.5),
+    legend.position = "top",
+    panel.border = element_rect(fill = NA, color = "black", linewidth = 0.75),
     axis.ticks = element_line(linewidth = 0.5),
-    panel.grid.major = element_line(linewidth = 0.05, color = "lightgray"),
-    panel.grid.minor = element_blank(),
-    strip.text = element_text(size = 14, face = "bold"),
-    legend.title = element_text(size = 12, face = "bold", hjust = 1),
-    legend.text = element_text(size = 12, hjust = 1),
+    panel.grid = element_blank(),
+    strip.text = element_text(size = 16, face = "bold"),
+    legend.title = element_text(size = 16, face = "bold"),
+    legend.text = element_text(size = 14, margin = margin(r = 10, l = 2)),
     axis.title = element_text(size = 14),
-    axis.text = element_text(size = 10)
+    axis.text = element_text(size = 10),
+    plot.margin = margin(l = 5, r = 20, t = 5, b = 5)
   ) +
   labs(
     x = expression("Change in mean body temperature (" * degree * "C)"),
@@ -938,11 +936,11 @@ otsm <- function(ctmin, topt, ctmax, sd_tb) {
 ## Supplementary Figures
 
 ```{r plot-supp-figure-1}
-#| fig-width: 4
-#| fig-height: 4
+#| fig-width: 3.5
+#| fig-height: 3.6
 #| out-width: "75%"
 #| fig.cap: |
-#|  **Supplementary Figure 1**: Optimal thermal safety margin (OTSM, expressed as below a TPC’s T<sub>opt</sub>) of TPCs with varying constitutive thermal performance breadths (colored lines) as a function of the standard deviation of the body temperature distribution they experience. Note that, in all cases, OTSM increases with increasing variability in body temperature, but only up to a point where it plateaus. The value at which this stabilization occurs is greater for wider than narrower TPCs (B), and in all cases this stabilization occurs at body temperatures that are well above a TPC’s CT<sub>min</sub>.
+#|  **Supplementary Figure 1**: Optimal thermal safety margin (OTSM, expressed as $\degree$C below a TPC’s T<sub>opt</sub>) of TPCs with varying constitutive thermal performance breadths (colored lines) as a function of the standard deviation of the body temperature distribution they experience. Note that, in all cases, OTSM increases with increasing variability in body temperature, but only up to a point where it plateaus. The value at which this stabilization occurs is greater for wider than narrower TPCs (B), and in all cases this stabilization occurs at body temperatures that are well above a TPC’s CT<sub>min</sub>.
 
 tpc_params <- tibble(
   tpc_breadth = c("w_15", "w_30", "w_45"),
@@ -965,18 +963,17 @@ otsm_grid |>
   scale_color_manual(
     values = c("#E69F00", "#56B4E9", "#36648B"),
     labels = c("15 °C", "30 °C", "45 °C"),
-    name = expression("TPC breadth (" * degree * "C)")
+    name = expression(T[br] *" ")
   ) +
   scale_x_continuous(
     expand = c(0, 0), limits = c(0, 20)
   ) +
   theme_minimal() +
   theme(
-    legend.position = c(0.25, 0.85),
-    axis.line = element_line(linewidth = 0.75),
+    legend.position = c(0.15, 0.85),
+    axis.line = element_line(linewidth = 0.5),
     axis.ticks = element_line(linewidth = 0.5),
-    panel.grid.major = element_line(linewidth = 0.05, color = "lightgray"),
-    panel.grid.minor = element_blank(),
+    panel.grid = element_blank(),
     strip.text = element_text(size = 14, face = "bold"),
     legend.title = element_text(size = 12, face = "bold", hjust = 0),
     legend.text = element_text(size = 12, hjust = 0)
@@ -988,3 +985,51 @@ otsm_grid |>
   )
 
 ```
+
+## References
+
+- Buckley, L. B., and R. B. Huey. 2016. Temperature extremes: geographic patterns, recent changes, and implications for organismal vulnerabilities. Global change biology 22:3829-3842.
+- Buckley, L. B., R. B. Huey, and J. G. Kingsolver. 2022. Asymmetry of thermal sensitivity and the thermal risk of climate change. Global Ecology and Biogeography 31:2231-2244.
+- Campos, D. F., R. D. Amanajás, V. M. Almeida‐Val, and A. L. Val. 2021. Climate vulnerability of South American freshwater fish: Thermal tolerance and acclimation. Journal of Experimental Zoology Part A: Ecological and Integrative Physiology 335:723-734.
+- Comte, L., and J. D. Olden. 2017. Evolutionary and environmental determinants of freshwater fish thermal tolerance and plasticity. Global Change Biology 23:728-736.
+- Denny, M. 2017. The fallacy of the average: on the ubiquity, utility and continuing novelty of Jensen's inequality. Journal of Experimental Biology 220:139-146.
+- Deutsch, C. A., J. J. Tewksbury, R. B. Huey, K. S. Sheldon, C. K. Ghalambor, D. C. Haak, and P. R. Martin. 2008. Impacts of climate warming on terrestrial ectotherms across latitude. Proceedings of the National Academy of Sciences 105:6668-6672.
+- Dewenter, B. S., D. P. Giling, A. A. Shah, J. Hughes, N. L. Poff, C. K. Ghalambor, W. C. Funk et al. 2025. Annual Temperature Range Drives Thermal Breadth of Freshwater Insects Across Multiple Spatial Scales. Ecology letters 28:e70288.
+- Dewenter, B. S., A. A. Shah, J. Hughes, N. L. Poff, R. Thompson, and B. J. Kefford. 2024. The thermal breadth of temperate and tropical freshwater insects supports the climate variability hypothesis. Ecology and Evolution 14:e10937.
+- Gabriel, W., and M. Lynch. 1992. The selective advantage of reaction norms for environmental tolerance. Journal of Evolutionary Biology 5:41-59.
+- Garnier, S., Noam Ross, N., Rudis, R., Camargo, A. P., Marco Sciaini, M., and Scherer, C. 2024. viridis(Lite) - Colorblind-Friendly Color Maps for R. viridis package version 0.6.5.
+- Ghalambor, C. K., R. B. Huey, P. R. Martin, J. J. Tewksbury, and G. Wang. 2006. Are mountain passes higher in the tropics? Janzen's hypothesis revisited. Integrative and Comparative Biology 46:5-17.
+- Gunderson, A. R., M. E. Dillon, and J. H. Stillman. 2017. Estimating the benefits of plasticity in ectotherm heat tolerance under natural thermal variability. Functional Ecology 31:1529-1539.
+- Gunderson, A. R., and J. H. Stillman. 2015. Plasticity in thermal tolerance has limited potential to buffer ectotherms from global warming. Proceedings of the Royal Society of London B: Biological Sciences 282:20150401.
+- Gutiérrez‐Pesquera, L. M., M. Tejedo, M. Á. Olalla‐Tárraga, H. Duarte, A. Nicieza, and M. Solé. 2016. Testing the climate variability hypothesis in thermal tolerance limits of tropical and temperate tadpoles. Journal of Biogeography 43:1166-1178.
+- Hertz, P. E., R. B. Huey, and R. Stevenson. 1993. Evaluating temperature regulation by field-active ectotherms: the fallacy of the inappropriate question. The American Naturalist 142:796-818.
+- Huey, R. B., C. A. Deutsch, J. J. Tewksbury, L. J. Vitt, P. E. Hertz, H. J. Á. Pérez, and T. Garland. 2009. Why tropical forest lizards are vulnerable to climate warming. Proceedings of the Royal Society B: Biological Sciences 276:1939-1948.
+- Janzen, D. H. 1967. Why mountain passes are higher in the tropics. The American Naturalist 101:233-249.
+- Kassambara, A. 2026. ggpubr:'ggplot2'based publication ready plots. R package version 0.6.3.
+- Kingsolver, J. G., and L. B. Buckley. 2017. Quantifying thermal extremes and biological variation to predict evolutionary responses to changing climate. Philosophical Transactions of the Royal Society B: Biological Sciences 372:20160147.
+- Kontopoulos, D. G., Sentis, A., Daufresne, M., Glazman, N., Dell, A. I., & Pawar, S. 2024. No universal mathematical model for thermal performance curves across traits and taxonomic groups. Nature Communications, 15(1), 8855.
+- Lande, R. 2009. Adaptation to an extraordinary environment by evolution of phenotypic plasticity and genetic assimilation. Journal of Evolutionary Biology 22:1435-1446.
+- Levins, R. 1963. Theory of fitness in a heterogeneous environment. II. Developmental flexibility and niche selection. The American Naturalist 97:75-90.
+- Logan, M. L., J. van Berkel, and S. Clusella-Trullas. 2019. The Bogert Effect and environmental heterogeneity. Oecologia 191:817-827.
+- Lynch, M., and W. Gabriel. 1987. Environmental tolerance. The American Naturalist 129:283-303.
+- Martin, T. L., and R. B. Huey. 2008. Why “suboptimal” is optimal: Jensen’s inequality and ectotherm thermal preferences. The American Naturalist 171:E102-E118.
+- Morley, S., L. Peck, J. Sunday, S. Heiser, and A. Bates. 2019. Physiological acclimation and persistence of ectothermic species under extreme heat events. Global Ecology and Biogeography 28:1018-1037.
+- Muñoz, M. M. 2022. The Bogert effect, a factor in evolution. Evolution 76:49-66.
+- Muñoz, M. M., M. A. Stimola, A. C. Algar, A. Conover, A. J. Rodriguez, M. A. Landestoy, G. S. Bakken et al. 2014. Evolutionary stasis and lability in thermal physiology in a group of tropical lizards. Proceedings of the Royal Society B: Biological Sciences 281:20132433.
+- Payne, N. L., and J. A. Smith. 2017. An alternative explanation for global trends in thermal tolerance. Ecology Letters 20:70-77.
+- Pinsky, M. L., Eikeset, A. M., McCauley, D. J., Payne, J. L., & Sunday, J. M. (2019). Greater vulnerability to warming of marine versus terrestrial ectotherms. Nature, 569(7754), 108-111.
+- Reed, T. E., R. S. Waples, D. E. Schindler, J. J. Hard, and M. T. Kinnison. 2010. Phenotypic plasticity and population viability: the importance of environmental predictability. Proceedings of the Royal Society B: Biological Sciences 277:3391-3400.
+- Rohr, J. R., D. J. Civitello, J. M. Cohen, E. A. Roznik, B. Sinervo, and A. I. Dell. 2018. The complex drivers of thermal acclimation and breadth in ectotherms. Ecology Letters 21:1425-1439.
+- Ruel, J. J., and M. P. Ayres. 1999. Jensen’s inequality predicts effects of environmental variation. Trends in Ecology & Evolution 14:361-366.
+- Ruthsatz, K., F. Dahlke, K. Alter, S. Wohlrab, P. C. Eterovick, M. L. Lyra, S. Gippner et al. 2024. Acclimation capacity to global warming of amphibians and freshwater fishes: Drivers, patterns, and data limitations. Global Change Biology 30:e17318.
+- Scheiner, S. M. 1993. Genetics and evolution of phenotypic plasticity. Annual review of ecology and systematics 24:35-68.
+- Seebacher, F., C. R. White, and C. E. Franklin. 2015. Physiological plasticity increases resilience of ectothermic animals to climate change. Nature Climate Change 5:61-66.
+- Shah, A. A., B. A. Gill, A. C. Encalada, A. S. Flecker, W. C. Funk, J. M. Guayasamin, B. C. Kondratieff et al. 2017. Climate variability predicts thermal limits of aquatic insects across elevation and latitude. Functional Ecology 31:2118-2127.
+- Sheldon, K. S., and J. J. Tewksbury. 2014. The impact of seasonality in temperature on thermal tolerance and elevational range size. Ecology 95:2134-2143.
+- Sinclair, B. J., K. E. Marshall, M. A. Sewell, D. L. Levesque, C. S. Willett, S. Slotsbo, Y. Dong et al. 2016. Can we predict ectotherm responses to climate change using thermal performance curves and body temperatures? Ecology Letters 19:1372-1385.
+- Sunday, J. M., A. E. Bates, and N. K. Dulvy. 2011. Global analysis of thermal tolerance and latitude in ectotherms. Proceedings of the Royal Society B: Biological Sciences 278:1823-1830.
+- Vasseur, D. A., J. P. DeLong, B. Gilbert, H. S. Greig, C. D. Harley, K. S. McCann, V. Savage et al. 2014. Increased temperature variation poses a greater risk to species than climate warming. Proceedings of the Royal Society of London B: Biological Sciences 281:20132612.
+- von May, R., A. Catenazzi, A. Corl, R. Santa‐Cruz, A. C. Carnaval, and C. Moritz. 2017. Divergence of thermal physiological traits in terrestrial breeding frogs along a tropical elevational gradient. Ecology and Evolution 7:3257-3267.
+- Weaving, H., J. S. Terblanche, P. Pottier, and S. English. 2022. Meta-analysis reveals weak but pervasive plasticity in insect thermal limits. Nature Communications 13:5292.
+- Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L. D. A., François, R., ... & Yutani, H. (2019). Welcome to the Tidyverse. Journal of open source software, 4(43), 1686.
+- Yilmaz, A. R., C. R. da Silva, and S. E. Diamond. 2026. Climatic variability drives greater thermal tolerance breadth and enables larger range size in butterflies. Biological Journal of the Linnean Society 147:blag003.
