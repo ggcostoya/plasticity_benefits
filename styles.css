@@ -1,0 +1,30 @@
+
+/* MathJax font configuration */
+body, .manuscript {
+  font-family: "MathJax_Main", "Times New Roman", serif;
+  font-size: 18px;  
+}
+
+/* Author names in the title banner */
+.quarto-title-meta-author p.author {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.quarto-title-meta-abstract p.affiliation {
+  font-size: 1rem;
+  font-style: italic;
+}
+
+/* Figure legend styling */
+.figure-legend, figcaption {
+  font-size: 18px;
+  color: #333333;
+}
+
+/* MathJax font stack */
+@font-face {
+  font-family: "MathJax_Main";
+  src: local("MathJax_Main"), local("MathJax_Main-Regular");
+}
+
