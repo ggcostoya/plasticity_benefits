@@ -10,11 +10,15 @@ format:
   html:
     theme: cosmo
     css: styles.css
+    other-links:
+      - text: "GitHub"
+        icon: github
+        href: https://github.com/ggcostoya/plasticity_benefits
 
 knitr:
   opts_chunk:
     dev: png
-    dpi: 300
+    dpi: 350
 
 execute:
   freeze: true

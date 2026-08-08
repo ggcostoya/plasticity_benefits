@@ -60,7 +60,7 @@ After plastic adjustment, fitness under the warmer regime is improved for all ta
 
 Second, despite achieving the highest net benefit of plasticity, the narrow TPC organism's absolute fitness post-plastic shift remains lower than that of its intermediate and wide TPC counterparts (Figure 1). Therefore, in the absence of complete plastic compensation, organisms with narrow TPCs must have greater plastic capacity than organisms with broad TPCs to maintain equivalent absolute fitness under the same level of environmental change. In our example, the narrow and intermediate TPC organisms would need to express ARRs of 0.76 and 0.54 to match the fitness of the wide TPC organism expressing an ARR of 0.30 (Figure 2). Note also that the benefit of evolving greater plasticity (i.e., increasing ARR) is highest for the narrow TPC organism and lowest for the wide TPC organism (Figure 2). This can be seen as a difference in the slope of the relationship between plasticity benefit and ARR in Figure 2. Therefore, under similar environmental conditions, the benefit of evolving greater plasticity increases when constitutively expressed TPCs are narrower. 
 
-```{r plot-figure-1}
+```{r figure-1}
 #| fig-width: 9
 #| fig-height: 7
 #| fig-cap: |
@@ -258,7 +258,7 @@ ggarrange(
 
 ```
 
-```{r plot-figure-2}
+```{r figure-2}
 #| fig-width: 4.5
 #| fig-height: 4
 #| out-width: "75%"
@@ -369,7 +369,7 @@ If we again assume an increase in mean body temperature of 3 °C, several patter
 
 Second, the extent to which within-season body temperature variation reduces the benefits of plasticity is dependent on TPC breadth. As within-season body temperature variation increases, the narrow TPC organism experiences the largest decrease in the benefit of plasticity, while the wide TPC organism is affected the least (compare points within a given TPC breadth in Figure 3B). In addition, within-season body temperature variation changes who benefits the most from plasticity. When $\sigma_{T_b}$ = 0, 2, or 5 °C (the purple, blue, and green lines in Figure 3B, respectively), the narrow TPC organism gains more from plasticity than the wide TPC organism. However, when $\sigma_{T_b} = 10$ °C, the narrow TPC organism benefits least, and the wide TPC organism benefits most (yellow line in Figure 3B).
 
-```{r plot-figure-3}
+```{r figure-3}
 #| fig-width: 8
 #| fig-height: 8
 #| fig.cap: |
@@ -665,7 +665,7 @@ ggarrange(
 
 Within-season body temperature variation also interacts with TPC breadth to affect the benefits of evolving greater plasticity (i.e., increasing ARR; Figure 4). The narrow constitutive TPC organism gains a greater net fitness benefit from evolving a higher ARR when within-season body temperature variation is low (Figure 4). This can be seen as differences in the slopes of the relationship between fitness benefit of plasticity and ARR when σTb is small (Figure 4, left; Figure 2). However, as within-season body temperature variation increases, the benefit  of evolving greater plasticity becomes similar for all TPCs (note slopes in Figure 4, center and right). Overall, greater within-season body temperature variation decreases the fitness benefit of evolving greater plasticity regardless of TPC breadth (Figure 4).
 
-```{r plot-figure-4}
+```{r figure-4}
 #| fig-width: 7
 #| fig-height: 4.5
 #| fig.cap: |
@@ -934,7 +934,7 @@ otsm <- function(ctmin, topt, ctmax, sd_tb) {
 
 ## Supplementary Figures
 
-```{r plot-supp-figure-1}
+```{r supp-figure-1}
 #| fig-width: 3.5
 #| fig-height: 3.6
 #| out-width: "75%"
