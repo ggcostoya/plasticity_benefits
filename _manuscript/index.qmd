@@ -210,8 +210,7 @@ panel_a <- ggplot(
     panel.grid = element_blank(),
     axis.ticks = element_line(linewidth = 0.5),
     panel.border = element_rect(fill = NA, color = "black", linewidth = 0.75),
-    plot.margin = margin(l = 10, r = 10, b = 10, t = 10),
-    plot.border = element_rect(color = NA, fill = NA)
+    plot.margin = margin(l = 10, r = 10, b = 10, t = 10)
   ) +
   labs(
     x = expression("Body Temperature ( " * degree * "C)"),
@@ -920,12 +919,12 @@ To calculate the optimal thermal safety margin (OTSM) for a given TPC and body t
 
 ```{r show-otsm-function}
 #| code-fold: false
-#| filename: "Function to estimate optimal thermal safety margin (OTSM) for a given TPC and body temperature distribution in R"
+#| filename: "Function to estimate OTSMs in R"
 
 otsm <- function(ctmin, topt, ctmax, sd_tb) {
   if (sd_tb == 0) 0 else {
     topt - optimize(
-      \(mean_tb) exp_w(ctmin = ctmin, topt = topt, ctmax = ctmax, # nolint
+      \(mean_tb) exp_w(ctmin = ctmin, topt = topt, ctmax = ctmax,
                        sd_tb = sd_tb, mean_tb = mean_tb),
       lower = ctmin, upper = ctmax, maximum = TRUE
     )$maximum
