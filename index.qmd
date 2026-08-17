@@ -164,7 +164,7 @@ panel_a <- ggplot(
   ) +
   geom_segment(
     data = benefits_df |>
-      filter(tpc_breadth %in% c(15, 30, 45)) |>
+      filter(tpc_breadth %in% c(15)) |>
       filter(plasticity == "TPC without plasticity"),
     aes(
       x = 10, xend = 10,
@@ -654,7 +654,7 @@ panel_b <- fitness_change_df |>
 ggarrange(
   panel_a, panel_b,
   ncol = 1, nrow = 2,
-  heights = c(3, 1.75),
+  heights = c(5, 4),
   labels = c("A", "B"),
   font.label = list(size = 20, face = "bold"),
   label.x = c(0, 0.2),
