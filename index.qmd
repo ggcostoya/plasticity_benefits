@@ -1,5 +1,5 @@
 ---
-title: "Climatic variability and the paradox of plasticity"
+title: "Climate variability and the paradox of plasticity"
 author:
   - name: "Alex Gunderson"
     affiliations:
@@ -22,7 +22,7 @@ author:
     email: "ggarciacosto@gmail.com"
     orcid: "0000-0003-0522-6108"
 abstract: |
-  Adaptive phenotypic plasticity is expected to evolve when environmental conditions change predictably over time. This has led to the hypothesis that ectotherms in environments with low temperature seasonality, such as the tropics, should evolve lower thermophysiological plasticity than those from more seasonal environments (the Climate Variability Plasticity Hypothesis, or CVHP). Yet, empirical support for the CVHP is incredibly low, creating a need to identify other factors that can help explain how thermal plasticity evolves. Here, we use numerical models to show that the evolution of constitutive thermal tolerance breadth greatly affects the evolutionary benefits of thermal plasticity. In particular, tolerance breadth interacts with within- and between-season temperature variation in ways that can confound expectations of the CVHP, including conditions in which organisms from less seasonal environments benefit most from expressing plasticity. Our findings indicate that a more holistic view of the relationship between thermophysiology and environmental temperature is needed to explain the evolution of thermal plasticity across climatic gradients. 
+  Adaptive phenotypic plasticity is expected to evolve when environmental conditions change predictably over time. This has led to the hypothesis that ectotherms in environments with low temperature seasonality, such as the tropics, should evolve lower thermophysiological plasticity than those from more seasonal environments (the Climate Variability Plasticity Hypothesis, or CVPH). Yet, empirical support for the CVPH is incredibly low, creating a need to identify other factors that can help explain how thermal plasticity evolves. Here, we use numerical models to show that the evolution of constitutive thermal tolerance breadth greatly affects the evolutionary benefits of thermal plasticity. In particular, tolerance breadth interacts with within- and between-season temperature variation in ways that can confound expectations of the CVPH, including conditions in which organisms from less seasonal environments benefit most from expressing plasticity. Our findings indicate that a more holistic view of the relationship between thermophysiology and environmental temperature is needed to explain the evolution of thermal plasticity across climatic gradients. 
 format:
     html:
         toc: true
@@ -838,11 +838,11 @@ Our results do not refute that the temporal temperature variation on which the C
  
 Our models indicate that key features of real organisms (constitutive tolerance breadth and body temperature variation) could contribute to a lack of support for the CVPH, and even produce patterns opposite to those predicted by the CVPH (Seebacher et al. 2015; Ruthsatz et al. 2024). Most tropical organisms live in environments with little temperature seasonality, but they are also likely to have narrow TPCs and experience relatively invariant body temperature distributions, features that combine to favor the evolution of thermal plasticity. Conversely, high-latitude species often live in environments with extensive seasonal temperature change, but they also tend to have broad TPCs and relatively variable body temperatures, characteristics that would limit the benefits of plasticity. 
 
-## Conclusions & Future Directions
+## Conclusions & Future directions
 
 Our results highlight areas that require greater attention to resolve outstanding questions about the evolution of thermal plasticity. First, we show that integrating information about constitutive TPC breadth would be beneficial. This likely extends to other features of TPCs that affect sensitivity, such as skewness (Buckley et al. 2022; Martin & Huey, 2008). Second, within-season body temperature variation requires much greater empirical attention with respect to the evolution of thermal plasticity. Furthermore, there may be important interactions between processes that change body temperature distributions, such as behavioral thermoregulation (Hertz et al. 1993, Logan et al., 2019; Muñoz, 2022), and the evolution of plasticity. Ultimately, our results endorse taking a more holistic view of temperature-dependent physiology and environmental temperature dynamics to deepen our understanding of how thermal plasticity evolves.
 
-## Additional Methods
+## Additional methods
 
 ### Thermal Performance Curves (TPCs)
 
@@ -858,7 +858,7 @@ W(T) =
 \end{cases}
 $$
 
-Where T<sub>opt</sub> is the optimal temperature, CT<sub>min</sub> is the critical thermal minimum, and CT<sub>max</sub> is the critical thermal maximum. We chose this equation because its parameters are thermal physiological traits commonly measured empirically and thus easily interpretable, and because there is no clear TPC equationthat is better than any other (Kontopoulos et al. 2024). As Deutsch et al. (2008) indicate, due to the exponential nature of the ascpenting part of this TPC equation (when T \< T<sub>opt</sub>), CT<sub>min</sub> does not coresspond exactly to W = 0, but to W \~ 0.001, although this should have minimal impact on our results. In all cases, we also assumed that T<sub>opt</sub> would be arbitrarily set at 30°C and that the asummetry of the TPC would be set to 2/3 such that T<sub>opt</sub> - CT<sub>min</sub> = 2 \* (CT<sub>max</sub> - T<sub>opt</sub>).
+Where T<sub>opt</sub> is the optimal temperature, CT<sub>min</sub> is the critical thermal minimum, and CT<sub>max</sub> is the critical thermal maximum. We chose this equation because its parameters are thermal physiological traits commonly measured empirically and thus easily interpretable, and because there is no clear TPC equation that is better than any other (Kontopoulos et al. 2024). As Deutsch et al. (2008) indicate, due to the exponential nature of the ascpenting part of this TPC equation (when T \< T<sub>opt</sub>), CT<sub>min</sub> does not coresspond exactly to W = 0, but to W \~ 0.001, although this should have minimal impact on our results. In all cases, we also assumed that T<sub>opt</sub> would be arbitrarily set at 30°C and that the asymmetry of the TPC would be set to 2/3 such that T<sub>opt</sub> - CT<sub>min</sub> = 2 \* (CT<sub>max</sub> - T<sub>opt</sub>).
 
 ```{r show-tpc-function}
 #| code-fold: false
@@ -887,7 +887,7 @@ tpc <- function(temps, topt, ctmin, ctmax) {
 
 ### Expected fitness calculation
 
-To calculate the expected fitness (E\[W\]) of a TPC under a given body temperature distribution, we used the method developed by Vasseur et al. (2014), which involves integrating the product of the TPC and the probability density function of the body temperature distribution across all possible body temperatures using th expression:
+To calculate the expected fitness (E\[W\]) of a TPC under a given body temperature distribution, we used the method developed by Vasseur et al. (2014), which involves integrating the product of the TPC and the probability density function of the body temperature distribution across all possible body temperatures using the expression:
 
 $$
 E(W) = \int_{T_{min}}^{T_{max}} W(T)\cdot PDF(N(T_m, T_{sd}), T) \,dT 
